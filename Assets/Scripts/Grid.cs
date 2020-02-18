@@ -58,10 +58,10 @@ public class Grid : MonoBehaviour
         offset.x = square_rect.rect.width * square_rect.transform.localScale.x;
         offset.y = square_rect.rect.height * square_rect.transform.localScale.y;
 
-     
+
         //literally wtf
         int block_length = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
-        
+
         //Alternative, more scalable placement
         for (int row = 0; row < length; row++)
         {
@@ -75,12 +75,12 @@ public class Grid : MonoBehaviour
 
                 //Only one of these two statements can ever trigger, unless the length is too small
                 //Above the square
-                if (row % block_length == 0) 
+                if (row % block_length == 0)
                 {
                     rotation += 1;
                 }
                 //Below the Square
-                if (row % block_length == block_length -1)
+                if (row % block_length == block_length - 1)
                 {
                     rotation += 100;
                 }
@@ -142,42 +142,64 @@ public class Grid : MonoBehaviour
 
                 //setting the actual position             
                 obj.GetComponent<RectTransform>().anchoredPosition = new Vector3(start_position.x + (offset.x * column), start_position.y - (offset.y * row));
-            } 
+            }
         }
     }
-
-    public static void SetGridNumber(int number)
+    public enum NumberPos
+    {
+        Standard,
+        Center,
+        Corner
+    }
+    public static void SetGridNumber(int number, NumberPos np)
     {
         if (selected_squares_.Count > 0)
         {
-            foreach (GridSquare square in selected_squares_)
+            if (np == NumberPos.Standard)
             {
-                square.SetNumber(number);
+                foreach (GridSquare square in selected_squares_)
+                {
+                    square.SetNumber(number);
+                }
+            }
+            else if (np == NumberPos.Center)
+            {
+                foreach (GridSquare square in selected_squares_)
+                {
+                    square.ToggleCenterMark(number);
+                }
+            }
+            else if (np == NumberPos.Corner)
+            {
+                foreach (GridSquare square in selected_squares_)
+                {
+                    square.ToggleCornerMark(number);
+                }
             }
         }
     }
 
-    public static void SetGridCenterMark(int number)
-    {
-        if (selected_squares_.Count > 0)
-        {
-            foreach (GridSquare square in selected_squares_)
-            {
-                square.ToggleCenterMark(number);
-            }
-        }
-    }
+    //public static void SetGridCenterMark(int number)
+    //{
+    //    if (selected_squares_.Count > 0)
+    //    {
+    //        foreach (GridSquare square in selected_squares_)
+    //        {
+    //            square.ToggleCenterMark(number);
+    //        }
+    //    }
+    //}
 
-    public static void SetGridCornerMark(int number)
-    {
-        if (selected_squares_.Count > 0)
-        {
-            foreach (GridSquare square in selected_squares_)
-            {
-                square.ToggleCornerMark(number);
-            }
-        }
-    }
+    //public static void SetGridCornerMark(int number)
+    //{
+    //    if (selected_squares_.Count > 0)
+    //    {
+    //        foreach (GridSquare square in selected_squares_)
+    //        {
+    //            square.ToggleCornerMark(number);
+    //        }
+    //    }
+    //}
 
 
     //Called when a selection is added to current list of selections
@@ -225,7 +247,7 @@ public class Grid : MonoBehaviour
                 //move left
                 if (selected_squares_.Count > 0)
                 {
-                                
+
                 }
                 break;
             case KeyCode.D:

@@ -43,16 +43,26 @@ public class GameScript : MonoBehaviour
     }
     private void KeyboardController(Event ev)
     {
+        Grid.NumberPos np = Grid.NumberPos.Standard;
+        if (ev.shift)
+        {
+            np = Grid.NumberPos.Corner;
+        }
+        if (ev.control)
+        {
+            np = Grid.NumberPos.Center;
+        }
         KeyCode kc = ev.keyCode;
         switch (kc)
         {
             case KeyCode.None:
                 break;
+                //All 'delete' cases
             case KeyCode.Backspace:
-                Grid.SetGridNumber(0);
-                break;
             case KeyCode.Delete:
-                Grid.SetGridNumber(0);
+            case KeyCode.Keypad0:
+            case KeyCode.Alpha0:
+                Grid.SetGridNumber(0, Grid.NumberPos.Standard);
                 break;
             case KeyCode.Clear:
                 break;
@@ -62,36 +72,7 @@ public class GameScript : MonoBehaviour
                 break;
             case KeyCode.Space:
                 break;
-            case KeyCode.Keypad0:
-                Grid.SetGridNumber(0);
-                break;
-            case KeyCode.Keypad1:
-                Grid.SetGridNumber(1);
-                break;
-            case KeyCode.Keypad2:
-                Grid.SetGridNumber(2);
-                break;
-            case KeyCode.Keypad3:
-                Grid.SetGridNumber(3);
-                break;
-            case KeyCode.Keypad4:
-                Grid.SetGridNumber(4);
-                break;
-            case KeyCode.Keypad5:
-                Grid.SetGridNumber(5);
-                break;
-            case KeyCode.Keypad6:
-                Grid.SetGridNumber(6);
-                break;
-            case KeyCode.Keypad7:
-                Grid.SetGridNumber(7);
-                break;
-            case KeyCode.Keypad8:
-                Grid.SetGridNumber(8);
-                break;
-            case KeyCode.Keypad9:
-                Grid.SetGridNumber(9);
-                break;
+                //All directional cases
             case KeyCode.UpArrow:
             case KeyCode.W:
             case KeyCode.DownArrow:
@@ -103,101 +84,29 @@ public class GameScript : MonoBehaviour
                 //Call to static Grid.cs method to add an adjacent square to the selection list
                 Grid.SelectAdjacent(kc);
                 break;
-            case KeyCode.Alpha0:
-                Grid.SetGridNumber(0);
-                break;
+                //All cases from 1-9
+            case KeyCode.Keypad1:
             case KeyCode.Alpha1:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(1);
-                }
-                else
-                {
-                    Grid.SetGridNumber(1);
-                }
-                break;
+            case KeyCode.Keypad2:
             case KeyCode.Alpha2:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(2);
-                }
-                else
-                {
-                    Grid.SetGridNumber(2);
-                }
-                break;
+            case KeyCode.Keypad3:
             case KeyCode.Alpha3:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(3);
-                }
-                else
-                {
-                    Grid.SetGridNumber(3);
-                }
-                break;
+            case KeyCode.Keypad4:
             case KeyCode.Alpha4:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(4);
-                }
-                else
-                {
-                    Grid.SetGridNumber(4);
-                }
-                break;
+            case KeyCode.Keypad5:
             case KeyCode.Alpha5:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(5);
-                }
-                else
-                {
-                    Grid.SetGridNumber(5);
-                }
-                break;
+            case KeyCode.Keypad6:
             case KeyCode.Alpha6:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(6);
-                }
-                else
-                {
-                    Grid.SetGridNumber(6);
-                }
-                break;
+            case KeyCode.Keypad7:
             case KeyCode.Alpha7:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(7);
-                }
-                else
-                {
-                    Grid.SetGridNumber(7);
-                }
-                break;
+            case KeyCode.Keypad8:
             case KeyCode.Alpha8:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(8);
-                }
-                else
-                {
-                    Grid.SetGridNumber(8);
-                }
-                break;
+            case KeyCode.Keypad9:
             case KeyCode.Alpha9:
-                if (ev.control || ev.shift)
-                {
-                    Grid.SetGridCenterMark(9);
-                }
-                else
-                {
-                    Grid.SetGridNumber(9);
-                }
+                //Don't look
+                Grid.SetGridNumber(int.Parse(kc.ToString()[kc.ToString().Length -1].ToString()), np);
                 break;
             case KeyCode.B:
-                Debug.Log("B");
                 break;
             case KeyCode.C:
                 break;

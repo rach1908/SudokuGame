@@ -8,6 +8,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 {
     public GameObject number_text;
     public GameObject TileImage;
+    public GameObject corner_text;
     public Sprite one_edge;
     public Sprite two_edge;
     public Sprite no_edge;
@@ -33,7 +34,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         if(number_ <= 0)
         {
             number_text.GetComponent<Text>().text = " ";
-            //Corner and Center notation logic here
+            //Sorting and displaying center marks
             if (center_marks_.Count > 0)
             {
                 number_text.GetComponent<Text>().fontSize = 30;
@@ -42,7 +43,14 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
                     number_text.GetComponent<Text>().text += i.ToString();
                 }
             }
-            //Corner marks??
+            //Sorting and displaying center marks
+            if (corner_marks_.Count > 0)
+            {
+                foreach (int i in corner_marks_)
+                {
+                    corner_text.GetComponent<Text>().text += i.ToString();
+                }
+            }
         }
         else
         {
@@ -78,10 +86,11 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         else
         {
             center_marks_.Add(number);
+            center_marks_.Sort();
         }
         DisplayText();
     }
-
+    //NOT WORKING
     public void ToggleCornerMark(int number)
     {
         if (corner_marks_.Contains(number))
@@ -91,6 +100,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         else
         {
             corner_marks_.Add(number);
+            corner_marks_.Sort();
         }
         DisplayText();
     }
