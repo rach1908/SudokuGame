@@ -25,11 +25,12 @@ public class Grid : MonoBehaviour
         {
             Debug.LogError("GridSquare object needs to have GridSquare script attached");
         }
+        //Easy test: 759300000800040360604000005300205001060974050900803006100000504098030002000002189
+        FillGrid("759300000800040360604000005300205001060974050900803006100000504098030002000002189");
         foreach (GridSquare gridSquare in all_squares_)
         {
-            //Default non-given text color: #1a67eb
-            gridSquare.ColorTheme("#FFFFFF", "#0000FF", "#00FF00", "#1A67EB");
-            Debug.Log("TEST");
+            //Default non-given text color: #1A67EB
+            gridSquare.ColorTheme("#FFFFFF", "#0000FF", "#00FF00", "#1A67EB", "#000000");
         }
     }
 
@@ -166,8 +167,6 @@ public class Grid : MonoBehaviour
                 //Order?
                 all_squares_[i].SetNumber(int.Parse(sudokuString[i].ToString()));
                 all_squares_[i].given = true;
-                ColorUtility.TryParseHtmlString("#000000", out var color);
-                all_squares_[i].number_text.GetComponent<Text>().color = color;
             }
         }
     }

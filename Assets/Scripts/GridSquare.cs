@@ -70,14 +70,18 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         }
     }
     //Menu change possibly
-    public void ColorTheme(string Default, string Selected, string Highlight, string text)
+    public void ColorTheme(string Default, string Selected, string Highlight, string text, string givens)
     {
         ColorUtility.TryParseHtmlString(Default, out DefaultHex);
         ColorUtility.TryParseHtmlString(Selected, out SelectedHex);
         ColorUtility.TryParseHtmlString(Highlight, out HighlightHex);
-        if (given != true)
+        if (given == false)
         {
             ColorUtility.TryParseHtmlString(text, out TextColor);
+        }
+        else
+        {
+            ColorUtility.TryParseHtmlString(givens, out TextColor);
         }
             number_text.GetComponent<Text>().color = TextColor;
     }
