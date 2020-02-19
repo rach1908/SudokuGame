@@ -15,6 +15,11 @@ public class GameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    private void OnGUI()
+    {
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             if (Grid.selected_squares_.Count > 0)
@@ -29,10 +34,6 @@ public class GameScript : MonoBehaviour
                 Grid.selected_squares_[Grid.selected_squares_.Count - 1].SetColor("SELECTED");
             }
         }
-    }
-
-    private void OnGUI()
-    {
         Event e = Event.current;
         if (e.type == EventType.KeyDown)
         {

@@ -8,6 +8,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 {
     public GameObject number_text;
     public GameObject TileImage;
+    public GameObject OverlayImage;
     public GameObject corner_text;
     public Sprite one_edge;
     public Sprite two_edge;
@@ -16,12 +17,15 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     public bool given = false;
     private List<int> center_marks_ = new List<int>();
     private List<int> corner_marks_ = new List<int>();
+    //Color of TileImage. Should only be changed in ColorTheme()
     private Color DefaultHex;
-    private Color HighlightHex;
+    //Color of the overlay while the square is selected
     private Color SelectedHex;
+    //Color of the Text
     private Color TextColor;
     void Start()
     {
+
     }
     
     void OnEnable()
@@ -70,11 +74,10 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         }
     }
     //Menu change possibly
-    public void ColorTheme(string Default, string Selected, string Highlight, string text, string givens)
+    public void ColorTheme(string Default, string Selected, string text, string givens)
     {
         ColorUtility.TryParseHtmlString(Default, out DefaultHex);
         ColorUtility.TryParseHtmlString(Selected, out SelectedHex);
-        ColorUtility.TryParseHtmlString(Highlight, out HighlightHex);
         if (given == false)
         {
             ColorUtility.TryParseHtmlString(text, out TextColor);
@@ -138,13 +141,19 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         switch (shade.ToUpper())
         {
             case "DEFAULT":
-                TileImage.GetComponent<Image>().color = DefaultHex;
+                Color defaultc = DefaultHex;
+                defaultc.a = 0.0f;
+                OverlayImage.GetComponent<Image>().color = defaultc;
                 break;
             case "SELECTED":
-                TileImage.GetComponent<Image>().color = SelectedHex;
+                Color selectedc = SelectedHex;
+                selectedc.a = 0.3f;
+                OverlayImage.GetComponent<Image>().color = selectedc;
                 break;
             case "HIGHLIGHTED":
-                TileImage.GetComponent<Image>().color = HighlightHex;
+                Color Highlightc = SelectedHex;
+                Highlightc.a = 0.8f;
+                OverlayImage.GetComponent<Image>().color = Highlightc;
                 break;
             default:
                 break;

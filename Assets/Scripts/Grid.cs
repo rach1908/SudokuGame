@@ -30,7 +30,7 @@ public class Grid : MonoBehaviour
         foreach (GridSquare gridSquare in all_squares_)
         {
             //Default non-given text color: #1A67EB
-            gridSquare.ColorTheme("#FFFFFF", "#0000FF", "#00FF00", "#1A67EB", "#000000");
+            gridSquare.ColorTheme("#FFFFFF", "#edf50c", "#1A67EB", "#000000");
         }
     }
 
