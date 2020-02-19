@@ -25,7 +25,14 @@ public class Grid : MonoBehaviour
         {
             Debug.LogError("GridSquare object needs to have GridSquare script attached");
         }
+        foreach (GridSquare gridSquare in all_squares_)
+        {
+            //Default non-given text color: #1a67eb
+            gridSquare.ColorTheme("#FFFFFF", "#0000FF", "#00FF00", "#1A67EB");
+            Debug.Log("TEST");
+        }
     }
+
 
     // Update is called once per frame
     void Update()

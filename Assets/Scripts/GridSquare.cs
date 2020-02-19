@@ -16,10 +16,15 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     public bool given = false;
     private List<int> center_marks_ = new List<int>();
     private List<int> corner_marks_ = new List<int>();
-    private string DefaultHex = "#ffffff";
-    private string HighlightHex = "#0000ff";
-    private string SelectedHex = "#ff0000";
+    private Color DefaultHex;
+    private Color HighlightHex;
+    private Color SelectedHex;
+    private Color TextColor;
     void Start()
+    {
+    }
+    
+    void OnEnable()
     {
         Grid.all_squares_.Add(this);
     }
@@ -64,12 +69,17 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             }
         }
     }
-
-    public void ColorTheme(string Default, string Selected, string Highlight)
+    //Menu change possibly
+    public void ColorTheme(string Default, string Selected, string Highlight, string text)
     {
-        DefaultHex = Default;
-        SelectedHex = Selected;
-        HighlightHex = Highlight;
+        ColorUtility.TryParseHtmlString(Default, out DefaultHex);
+        ColorUtility.TryParseHtmlString(Selected, out SelectedHex);
+        ColorUtility.TryParseHtmlString(Highlight, out HighlightHex);
+        if (given != true)
+        {
+            ColorUtility.TryParseHtmlString(text, out TextColor);
+        }
+            number_text.GetComponent<Text>().color = TextColor;
     }
 
     public void SetNumber(int number)
@@ -102,7 +112,6 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             DisplayText();
         }
     }
-    //NOT WORKING
     public void ToggleCornerMark(int number)
     {
         if (given == false)
@@ -122,23 +131,20 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 
     public void SetColor(string shade)
     {
-        Color color = Color.black;
         switch (shade.ToUpper())
         {
             case "DEFAULT":
-                ColorUtility.TryParseHtmlString(DefaultHex, out color);
+                TileImage.GetComponent<Image>().color = DefaultHex;
                 break;
             case "SELECTED":
-                ColorUtility.TryParseHtmlString(SelectedHex, out color);
+                TileImage.GetComponent<Image>().color = SelectedHex;
                 break;
             case "HIGHLIGHTED":
-                ColorUtility.TryParseHtmlString(HighlightHex, out color);
+                TileImage.GetComponent<Image>().color = HighlightHex;
                 break;
             default:
                 break;
         }
-        TileImage.GetComponent<Image>().color = color;
-
     }
 
     //Only called while the grid is generated, the method calling this is responsible for the logic
