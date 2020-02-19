@@ -488,7 +488,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 9
-  nonnet_line_thicc: 0
   grid_square: {fileID: 2242099987605308317, guid: 1e91a6c78c4db1f49aac67d4e3533818,
     type: 3}
   start_position: {x: -380, y: 400}

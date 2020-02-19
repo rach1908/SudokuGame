@@ -12,12 +12,14 @@ public class Grid : MonoBehaviour
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
     public float square_scale = 1.0f;
 
+    private static int root = 0;
     private static List<GameObject> grid_squares_ = new List<GameObject>();
     public static List<GridSquare> selected_squares_ = new List<GridSquare>();
     public static List<GridSquare> all_squares_ = new List<GridSquare>();
 
     void Start()
     {
+        root = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
         CreateGrid();
         if (grid_square.GetComponent<GridSquare>() == null)
         {
@@ -35,6 +37,7 @@ public class Grid : MonoBehaviour
     {
         SpawnGridSquares();
         SetSquarePosition();
+        
     }
 
     private void SpawnGridSquares()
@@ -48,6 +51,7 @@ public class Grid : MonoBehaviour
                 grid_squares_[grid_squares_.Count - 1].transform.localScale = new Vector3(square_scale, square_scale);
             }
         }
+        
     }
 
     private void SetSquarePosition()
@@ -57,10 +61,6 @@ public class Grid : MonoBehaviour
         //Offsetting Square positions based on their position in the grid
         offset.x = square_rect.rect.width * square_rect.transform.localScale.x;
         offset.y = square_rect.rect.height * square_rect.transform.localScale.y;
-
-
-        //literally wtf
-        int block_length = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
 
         //Alternative, more scalable placement
         for (int row = 0; row < length; row++)
@@ -75,24 +75,24 @@ public class Grid : MonoBehaviour
 
                 //Only one of these two statements can ever trigger, unless the length is too small
                 //Above the square
-                if (row % block_length == 0)
+                if (row % root == 0)
                 {
                     rotation += 1;
                 }
                 //Below the Square
-                if (row % block_length == block_length - 1)
+                if (row % root == root - 1)
                 {
                     rotation += 100;
                 }
 
                 //Only one of these two statements can ever trigger, unless the length is too small
                 //Left of the Square
-                if (column % block_length == 0)
+                if (column % root == 0)
                 {
                     rotation += 1000;
                 }
                 //Right of the Square
-                if (column % block_length == block_length - 1)
+                if (column % root == root - 1)
                 {
                     rotation += 10;
                 }
@@ -145,12 +145,32 @@ public class Grid : MonoBehaviour
             }
         }
     }
+
+    private void FillGrid(string sudokuString)
+    {
+        if (sudokuString.Length != length * length)
+        {
+            throw new ArgumentException("The string is not appropriate length");
+        }
+        for (int i = 0; i < length * length; i++)
+        {
+            if (int.Parse(sudokuString[i].ToString()) != 0)
+            {
+                //Order?
+                all_squares_[i].SetNumber(int.Parse(sudokuString[i].ToString()));
+                all_squares_[i].given = true;
+                ColorUtility.TryParseHtmlString("#000000", out var color);
+                all_squares_[i].number_text.GetComponent<Text>().color = color;
+            }
+        }
+    }
     public enum NumberPos
     {
         Standard,
         Center,
         Corner
     }
+
     public static void SetGridNumber(int number, NumberPos np)
     {
         if (selected_squares_.Count > 0)
@@ -178,29 +198,6 @@ public class Grid : MonoBehaviour
             }
         }
     }
-
-    //public static void SetGridCenterMark(int number)
-    //{
-    //    if (selected_squares_.Count > 0)
-    //    {
-    //        foreach (GridSquare square in selected_squares_)
-    //        {
-    //            square.ToggleCenterMark(number);
-    //        }
-    //    }
-    //}
-
-    //public static void SetGridCornerMark(int number)
-    //{
-    //    if (selected_squares_.Count > 0)
-    //    {
-    //        foreach (GridSquare square in selected_squares_)
-    //        {
-    //            square.ToggleCornerMark(number);
-    //        }
-    //    }
-    //}
-
 
     //Called when a selection is added to current list of selections
     public static void SelectSquare(GridSquare g)
@@ -233,37 +230,81 @@ public class Grid : MonoBehaviour
 
     //Called when a click is registrered outside of the grid
     //Not in use as of now
-    public static void RemoveSelected()
+    public static void ClearSelected()
     {
         selected_squares_ = new List<GridSquare>();
     }
 
-    public static void SelectAdjacent(KeyCode kc)
+    public static void SelectAdjacent(Event ev)
     {
-        switch (kc)
+        if (selected_squares_.Count > 0)
         {
-            case KeyCode.A:
-            case KeyCode.LeftArrow:
-                //move left
-                if (selected_squares_.Count > 0)
-                {
-
-                }
-                break;
-            case KeyCode.D:
-            case KeyCode.RightArrow:
-                //move right
-                break;
-            case KeyCode.W:
-            case KeyCode.UpArrow:
-                //move up
-                break;
-            case KeyCode.S:
-            case KeyCode.DownArrow:
-                //move down
-                break;
-            default:
-                break;
+            //Finding the index of the most recently selected square
+            int index = all_squares_.IndexOf(selected_squares_[selected_squares_.Count - 1]);
+            //target is the gridsquare that will be added to the selection.
+            //Currently it refers to the most recently selected, so a failure in the method will not result in a random square being selected
+            GridSquare target = all_squares_[index];
+            switch (ev.keyCode)
+            {
+                case KeyCode.A:
+                case KeyCode.LeftArrow:
+                    //move left
+                    if (index % (root * root) == 0)
+                    {
+                        target = all_squares_[index + 8];
+                    }
+                    else
+                    {
+                        target = all_squares_[index - 1];
+                    }
+                    break;
+                case KeyCode.D:
+                case KeyCode.RightArrow:
+                    //move right
+                    if (index % (root * root) == (root*root) - 1)
+                    {
+                        target = all_squares_[index - 8];
+                    }
+                    else
+                    {
+                        target = all_squares_[index + 1];
+                    }
+                    break;
+                case KeyCode.W:
+                case KeyCode.UpArrow:
+                    //move up
+                    if (index / (root * root) == 0)
+                    {
+                        target = all_squares_[index + (8 * root * root)];
+                    }
+                    else
+                    {
+                        target = all_squares_[index - (root * root)];
+                    }
+                    break;
+                case KeyCode.S:
+                case KeyCode.DownArrow:
+                    //move down
+                    if (index / (root * root) == (root * root) - 1)
+                    {
+                        target = all_squares_[index - (8 * root * root)];
+                    }
+                    else
+                    {
+                        target = all_squares_[index + (root * root)];
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (ev.shift || ev.control)
+            {
+                SelectSquare(target);
+            }
+            else
+            {
+                ReSelectSquare(target);
+            }
         }
     }
 }

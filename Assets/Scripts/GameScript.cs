@@ -82,7 +82,7 @@ public class GameScript : MonoBehaviour
             case KeyCode.LeftArrow:
             case KeyCode.A:
                 //Call to static Grid.cs method to add an adjacent square to the selection list
-                Grid.SelectAdjacent(kc);
+                Grid.SelectAdjacent(ev);
                 break;
                 //All cases from 1-9
             case KeyCode.Keypad1:

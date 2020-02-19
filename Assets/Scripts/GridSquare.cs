@@ -13,6 +13,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     public Sprite two_edge;
     public Sprite no_edge;
     private int number_ = 0;
+    public bool given = false;
     private List<int> center_marks_ = new List<int>();
     private List<int> corner_marks_ = new List<int>();
     private string DefaultHex = "#ffffff";
@@ -20,7 +21,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     private string SelectedHex = "#ff0000";
     void Start()
     {
-        
+        Grid.all_squares_.Add(this);
     }
 
     // Update is called once per frame
@@ -31,31 +32,36 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 
     public void DisplayText()
     {
-        if(number_ <= 0)
+        if (given == false)
         {
-            number_text.GetComponent<Text>().text = " ";
-            //Sorting and displaying center marks
-            if (center_marks_.Count > 0)
+            if (number_ <= 0)
             {
-                number_text.GetComponent<Text>().fontSize = 30;
-                foreach (int i in center_marks_)
+                number_text.GetComponent<Text>().text = " ";
+                corner_text.GetComponent<Text>().text = " ";
+                //Sorting and displaying center marks
+                if (center_marks_.Count > 0)
                 {
-                    number_text.GetComponent<Text>().text += i.ToString();
+                    number_text.GetComponent<Text>().fontSize = 30;
+                    foreach (int i in center_marks_)
+                    {
+                        number_text.GetComponent<Text>().text += i.ToString();
+                    }
+                }
+                //Sorting and displaying center marks
+                if (corner_marks_.Count > 0)
+                {
+                    foreach (int i in corner_marks_)
+                    {
+                        corner_text.GetComponent<Text>().text += i.ToString();
+                    }
                 }
             }
-            //Sorting and displaying center marks
-            if (corner_marks_.Count > 0)
+            else
             {
-                foreach (int i in corner_marks_)
-                {
-                    corner_text.GetComponent<Text>().text += i.ToString();
-                }
+                number_text.GetComponent<Text>().text = number_.ToString();
+                number_text.GetComponent<Text>().fontSize = 75;
+                corner_text.GetComponent<Text>().text = " ";
             }
-        }
-        else
-        {
-            number_text.GetComponent<Text>().text = number_.ToString();
-            number_text.GetComponent<Text>().fontSize = 75;
         }
     }
 
@@ -65,65 +71,74 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         SelectedHex = Selected;
         HighlightHex = Highlight;
     }
-   
+
     public void SetNumber(int number)
     {
-        if (number_ == 0 && number == 0)
+        if (given == false)
         {
-            center_marks_ = new List<int>();
-            corner_marks_ = new List<int>();
+            if (number_ == 0 && number == 0)
+            {
+                center_marks_ = new List<int>();
+                corner_marks_ = new List<int>();
+            }
+            number_ = number;
+            DisplayText();
         }
-        number_ = number;
-        DisplayText();
     }
 
     public void ToggleCenterMark(int number)
     {
-        if (center_marks_.Contains(number))
+        if (given == false)
         {
-            center_marks_.Remove(number);
+            if (center_marks_.Contains(number))
+            {
+                center_marks_.Remove(number);
+            }
+            else
+            {
+                center_marks_.Add(number);
+                center_marks_.Sort();
+            }
+            DisplayText();
         }
-        else
-        {
-            center_marks_.Add(number);
-            center_marks_.Sort();
-        }
-        DisplayText();
     }
     //NOT WORKING
     public void ToggleCornerMark(int number)
     {
-        if (corner_marks_.Contains(number))
+        if (given == false)
         {
-            corner_marks_.Remove(number);
+            if (corner_marks_.Contains(number))
+            {
+                corner_marks_.Remove(number);
+            }
+            else
+            {
+                corner_marks_.Add(number);
+                corner_marks_.Sort();
+            }
+            DisplayText();
         }
-        else
-        {
-            corner_marks_.Add(number);
-            corner_marks_.Sort();
-        }
-        DisplayText();
     }
 
     public void SetColor(string shade)
     {
+        Color color = Color.black;
         switch (shade.ToUpper())
         {
             case "DEFAULT":
-                ColorUtility.TryParseHtmlString(DefaultHex, out var Default_color);
-                TileImage.GetComponent<Image>().color = Default_color;
+                ColorUtility.TryParseHtmlString(DefaultHex, out color);
                 break;
             case "SELECTED":
-                ColorUtility.TryParseHtmlString(SelectedHex, out var Selected_color);
-                TileImage.GetComponent<Image>().color = Selected_color;
+                ColorUtility.TryParseHtmlString(SelectedHex, out color);
                 break;
             case "HIGHLIGHTED":
-                ColorUtility.TryParseHtmlString(HighlightHex, out var Highlight_color);
-                TileImage.GetComponent<Image>().color = Highlight_color;
+                ColorUtility.TryParseHtmlString(HighlightHex, out color);
                 break;
             default:
                 break;
         }
+        TileImage.GetComponent<Image>().color = color;
+
     }
 
     //Only called while the grid is generated, the method calling this is responsible for the logic
@@ -152,7 +167,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (Input.GetKey(KeyCode.LeftShift)|| Input.GetKey(KeyCode.RightShift))
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             Grid.SelectSquare(this);
         }
