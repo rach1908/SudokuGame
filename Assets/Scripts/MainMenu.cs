@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Options;
 
 public class MainMenu : MonoBehaviour
 {
@@ -8,14 +9,14 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         //Player prefs
-        if (PlayerPrefs.GetString("c.tile_default") == "")
+        if (PlayerPrefs.GetString(pref_keys.c_tile_default.ToString()) == "")
         {
             //If no playerprefs are found, default ones are added
-            PlayerPrefs.SetString("c.tile_default", "#FFFFFF");
-            PlayerPrefs.SetString("c.tile_highlighted", "#EDF50C");
-            PlayerPrefs.SetString("c.text_given", "#000000");
-            PlayerPrefs.SetString("c.text_input", "#1A67EB");
-            PlayerPrefs.SetInt("error_highlighting", 0);
+            PlayerPrefs.SetString(pref_keys.c_tile_default.ToString(), "#FFFFFF");
+            PlayerPrefs.SetString(pref_keys.c_tile_highlighted.ToString(), "#EDF50C");
+            PlayerPrefs.SetString(pref_keys.c_text_given.ToString(), "#000000");
+            PlayerPrefs.SetString(pref_keys.c_text_input.ToString(), "#1A67EB");
+            PlayerPrefs.SetInt(pref_keys.error_highlighting.ToString(), 0);
         }
         
     }

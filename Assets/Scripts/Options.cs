@@ -11,8 +11,8 @@ public class Options : MonoBehaviour
     public GameObject color_button02;
     public GameObject color_button03;
     public GameObject error_button;
-    //Will need to be updated to load the playerpref once that is a thing
     private error_Highlighting current_error;
+    private color_Themes current_theme;
     private enum error_Highlighting
     {
         Never,
@@ -25,10 +25,27 @@ public class Options : MonoBehaviour
         Blue,
         Green
     }
+    //All playerPrefs keys - be sure to call playerprefs using this enum to avoid spelling errors
+    public enum pref_keys
+    {
+        c_tile_default,
+        c_tile_highlighted,
+        c_text_given,
+        c_text_input,
+        error_highlighting
+    }
     // Start is called before the first frame update
     void Start()
     {
-        current_error = (error_Highlighting)PlayerPrefs.GetInt("error_highlighting");
+        switch (PlayerPrefs.GetString(pref_keys.c_tile_highlighted.ToString()))
+        {
+            case "":
+                break;
+
+            default:
+                break;
+        }
+        current_error = (error_Highlighting)PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString());
         color_button01.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Yellow); });
         color_button02.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Blue); });
         color_button03.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Green); });
@@ -46,29 +63,30 @@ public class Options : MonoBehaviour
         int j = valueList.IndexOf(current_error) + 1;
         j = valueList.Count == j ? 0 : j;
         current_error = (error_Highlighting)j;
-        PlayerPrefs.SetInt("error_highlighting", j);
+        PlayerPrefs.SetInt(pref_keys.error_highlighting.ToString(), j);
         error_button.GetComponentInChildren<Text>().text = current_error.ToString();
-        Debug.Log(PlayerPrefs.GetInt("error_highlighting").ToString());
     }
 
     private void ColorButtons(color_Themes color)
     {
+        string col = "";
         switch (color)
         {
+            default:
             case color_Themes.Yellow:
-                PlayerPrefs.SetString("c.tile_highlighted", "#EDF50C");
+                col = "#EDF50C";
                 color_button01.GetComponent<Button>().interactable = false;
                 break;
             case color_Themes.Blue:
-                PlayerPrefs.SetString("c.tile_highlighted", "#17A4EB");
+                col = "#17A4EB";
                 color_button02.GetComponent<Button>().interactable = false;
                 break;
             case color_Themes.Green:
-                PlayerPrefs.SetString("c.tile_highlighted", "#4BC96E");
+                col= "#4BC96E";
                 color_button03.GetComponent<Button>().interactable = false;
                 break;
-            default:
-                break;
+
         }
+        PlayerPrefs.SetString(pref_keys.c_tile_default.ToString(), col);
     }
 }

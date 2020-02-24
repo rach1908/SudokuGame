@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Options;
 
 public class Grid : MonoBehaviour
 {
@@ -30,10 +31,10 @@ public class Grid : MonoBehaviour
         foreach (GridSquare gridSquare in all_squares_)
         {
             gridSquare.ColorTheme(
-                PlayerPrefs.GetString("c.tile_default"), 
-                PlayerPrefs.GetString("c.tile_highlighted"), 
-                PlayerPrefs.GetString("c.text_input"), 
-                PlayerPrefs.GetString("c.text_given")
+                PlayerPrefs.GetString(pref_keys.c_tile_default.ToString()),
+                PlayerPrefs.GetString(pref_keys.c_tile_highlighted.ToString()),
+                PlayerPrefs.GetString(pref_keys.c_text_input.ToString()), 
+                PlayerPrefs.GetString(pref_keys.c_text_given.ToString())
                 );
         }
     }

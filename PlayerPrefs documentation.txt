@@ -1,7 +1,7 @@
 Colors: (hex values)
-c.tile_default
-c.tile_highlighted
-c.text_given
-c.text_input
+c_tile_default (string)
+c_tile_highlighted (string)
+c_text_given (string)
+c_text_input (string)
 Options:
-error_highlighting
+error_highlighting (int)
