@@ -51,6 +51,17 @@ public class Options : MonoBehaviour
 
     private void ColorButtons(color_Themes color)
     {
-
+        switch (color)
+        {
+            case color_Themes.Yellow:
+                PlayerPrefs.SetString("")
+                break;
+            case color_Themes.Blue:
+                break;
+            case color_Themes.Grey:
+                break;
+            default:
+                break;
+        }
     }
 }
