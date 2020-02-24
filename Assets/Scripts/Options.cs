@@ -51,7 +51,9 @@ public class Options : MonoBehaviour
                 break;
 
         }
+       
         current_error = (error_Highlighting)PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString());
+        error_button.GetComponentInChildren<Text>().text = current_error.ToString();
         color_button01.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Yellow); });
         color_button02.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Blue); });
         color_button03.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Green); });
@@ -102,6 +104,6 @@ public class Options : MonoBehaviour
                 break;
 
         }
-        PlayerPrefs.SetString(pref_keys.c_tile_default.ToString(), col);
+        PlayerPrefs.SetString(pref_keys.c_tile_highlighted.ToString(), col);
     }
 }
