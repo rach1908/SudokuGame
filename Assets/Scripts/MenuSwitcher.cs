@@ -59,7 +59,7 @@ public class MenuSwitcher : MonoBehaviour
         {
             foreach (Canvas canvas in all_menus)
             {
-                canvas.GetComponent<Canvas>().sortingOrder = 0;
+                canvas.sortingOrder = 0;
             }
             switch (menu)
             {

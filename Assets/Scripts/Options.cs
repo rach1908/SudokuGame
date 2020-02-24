@@ -12,7 +12,7 @@ public class Options : MonoBehaviour
     public GameObject color_button03;
     public GameObject error_button;
     private error_Highlighting current_error;
-    private color_Themes current_theme;
+    private List<Button> color_buttons = new List<Button>();
     private enum error_Highlighting
     {
         Never,
@@ -39,16 +39,27 @@ public class Options : MonoBehaviour
     {
         switch (PlayerPrefs.GetString(pref_keys.c_tile_highlighted.ToString()))
         {
-            case "":
+            default:
+            case "#EDF50C":
+                color_button01.GetComponent<Button>().interactable = false;
+                break;
+            case "#17A4EB":
+                color_button02.GetComponent<Button>().interactable = false;
+                break;
+            case "#4BC96E":
+                color_button03.GetComponent<Button>().interactable = false;
                 break;
 
-            default:
-                break;
         }
         current_error = (error_Highlighting)PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString());
         color_button01.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Yellow); });
         color_button02.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Blue); });
         color_button03.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Green); });
+        color_buttons.AddRange(new List<Button> {
+            color_button01.GetComponent<Button>(),
+            color_button02.GetComponent<Button>(),
+            color_button03.GetComponent<Button>()
+        });
     }
 
     // Update is called once per frame
@@ -70,6 +81,10 @@ public class Options : MonoBehaviour
     private void ColorButtons(color_Themes color)
     {
         string col = "";
+        foreach (Button button in color_buttons)
+        {
+            button.interactable = true;
+        }
         switch (color)
         {
             default:
