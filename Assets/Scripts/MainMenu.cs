@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
             PlayerPrefs.SetString("c.tile_highlighted", "#EDF50C");
             PlayerPrefs.SetString("c.text_given", "#000000");
             PlayerPrefs.SetString("c.text_input", "#1A67EB");
-            PlayerPrefs.SetString("error_highlighting", "NEVER");
+            PlayerPrefs.SetInt("error_highlighting", 0);
         }
         
     }

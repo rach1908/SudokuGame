@@ -29,8 +29,12 @@ public class Grid : MonoBehaviour
         FillGrid("759300000800040360604000005300205001060974050900803006100000504098030002000002189");
         foreach (GridSquare gridSquare in all_squares_)
         {
-            //Default non-given text color: #1A67EB
-            gridSquare.ColorTheme("#FFFFFF", "#edf50c", "#1A67EB", "#000000");
+            gridSquare.ColorTheme(
+                PlayerPrefs.GetString("c.tile_default"), 
+                PlayerPrefs.GetString("c.tile_highlighted"), 
+                PlayerPrefs.GetString("c.text_input"), 
+                PlayerPrefs.GetString("c.text_given")
+                );
         }
     }
 

@@ -23,15 +23,15 @@ public class Options : MonoBehaviour
     {
         Yellow,
         Blue,
-        Grey
+        Green
     }
     // Start is called before the first frame update
     void Start()
     {
-        current_error = error_Highlighting.Never;
+        current_error = (error_Highlighting)PlayerPrefs.GetInt("error_highlighting");
         color_button01.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Yellow); });
         color_button02.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Blue); });
-        color_button03.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Grey); });
+        color_button03.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Green); });
     }
 
     // Update is called once per frame
@@ -44,9 +44,11 @@ public class Options : MonoBehaviour
     {
         List<Options.error_Highlighting> valueList = Enum.GetValues(typeof(error_Highlighting)).Cast<Options.error_Highlighting>().ToList();
         int j = valueList.IndexOf(current_error) + 1;
-        current_error = valueList.Count == j ? (error_Highlighting)0 : (error_Highlighting)j;
+        j = valueList.Count == j ? 0 : j;
+        current_error = (error_Highlighting)j;
+        PlayerPrefs.SetInt("error_highlighting", j);
         error_button.GetComponentInChildren<Text>().text = current_error.ToString();
-        //Need to add player pref?
+        Debug.Log(PlayerPrefs.GetInt("error_highlighting").ToString());
     }
 
     private void ColorButtons(color_Themes color)
@@ -54,11 +56,16 @@ public class Options : MonoBehaviour
         switch (color)
         {
             case color_Themes.Yellow:
-                PlayerPrefs.SetString("")
+                PlayerPrefs.SetString("c.tile_highlighted", "#EDF50C");
+                color_button01.GetComponent<Button>().interactable = false;
                 break;
             case color_Themes.Blue:
+                PlayerPrefs.SetString("c.tile_highlighted", "#17A4EB");
+                color_button02.GetComponent<Button>().interactable = false;
                 break;
-            case color_Themes.Grey:
+            case color_Themes.Green:
+                PlayerPrefs.SetString("c.tile_highlighted", "#4BC96E");
+                color_button03.GetComponent<Button>().interactable = false;
                 break;
             default:
                 break;
