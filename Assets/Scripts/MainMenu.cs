@@ -20,6 +20,8 @@ public class MainMenu : MonoBehaviour
             PlayerPrefs.SetString(pref_keys.c_text_input.ToString(), "#1A67EB");
             PlayerPrefs.SetInt(pref_keys.error_highlighting.ToString(), 0);
         }
+        Sudoku.current = new Sudoku("759300000800040360604000005300205001060974050900803006100000504098030002000002189", LevelSelect.Difficulty.Easy);
+        SaveLoad.Save();
     }
 
     // Update is called once per frame
