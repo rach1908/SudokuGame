@@ -26,7 +26,12 @@ public class Grid : MonoBehaviour
         {
             Debug.LogError("GridSquare object needs to have GridSquare script attached");
         }
+        foreach (GameObject game in grid_squares_)
+        {
+            all_squares_.Add(game.GetComponent<GridSquare>());
+        }
         //Easy test: 759300000800040360604000005300205001060974050900803006100000504098030002000002189
+        //This will recieve data from the Level Select Menu
         FillGrid("759300000800040360604000005300205001060974050900803006100000504098030002000002189");
         foreach (GridSquare gridSquare in all_squares_)
         {
@@ -169,9 +174,8 @@ public class Grid : MonoBehaviour
         {
             if (int.Parse(sudokuString[i].ToString()) != 0)
             {
-                //Order?
-                all_squares_[i].SetNumber(int.Parse(sudokuString[i].ToString()));
-                all_squares_[i].given = true;
+                grid_squares_[i].GetComponent<GridSquare>().SetNumber(int.Parse(sudokuString[i].ToString()));
+                grid_squares_[i].GetComponent<GridSquare>().given = true;
             }
         }
     }

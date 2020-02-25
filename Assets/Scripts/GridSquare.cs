@@ -27,11 +27,6 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     {
 
     }
-    
-    void OnEnable()
-    {
-        Grid.all_squares_.Add(this);
-    }
 
     // Update is called once per frame
     void Update()

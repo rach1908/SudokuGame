@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using static Options;
 
@@ -18,7 +20,10 @@ public class MainMenu : MonoBehaviour
             PlayerPrefs.SetString(pref_keys.c_text_input.ToString(), "#1A67EB");
             PlayerPrefs.SetInt(pref_keys.error_highlighting.ToString(), 0);
         }
-        
+
+        SaveLoad.TestSave("Testing");
+        Debug.Log(SaveLoad.TestLoad());
+
     }
 
     // Update is called once per frame
