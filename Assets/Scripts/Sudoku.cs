@@ -4,7 +4,7 @@ using UnityEngine;
 using static LevelSelect;
 
 [System.Serializable]
-public class Sudoku
+public class Sudoku : MonoBehaviour
 {
     public static Sudoku current;
     public Difficulty difficulty;

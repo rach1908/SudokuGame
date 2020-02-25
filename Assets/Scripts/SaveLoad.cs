@@ -8,7 +8,7 @@ using System;
 public static class SaveLoad
 {
     public static List<Sudoku> sudokus_ = new List<Sudoku>();
-
+    //!!IMPORTANT!! Sudoku.current MUST BE SET WHEN THE LEVEL IS LOADED!!
     public static void Save()
     {
         sudokus_.Add(Sudoku.current);
@@ -18,7 +18,7 @@ public static class SaveLoad
         file.Close();
     }
 
-    public static void Load()
+    public static List<Sudoku> Load()
     {
         if (File.Exists("./levels.lvl"))
         {
@@ -26,7 +26,9 @@ public static class SaveLoad
             FileStream file = File.Open("./levels.lvl", FileMode.Open);
             sudokus_ = (List<Sudoku>)bf.Deserialize(file);
             file.Close();
+            return sudokus_;
         }
+        throw new ArgumentException("There are no sudokus to load!");
     }
 
     //WORKING
