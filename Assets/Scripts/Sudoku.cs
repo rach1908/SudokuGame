@@ -21,6 +21,11 @@ public class Sudoku
         set { finished = value; }
     }
 
+    public Difficulty dif
+    {
+        get { return difficulty; }
+    }
+
     public string Player_prog_numbers
     {
         get { return player_prog_numbers; }

@@ -571,6 +571,7 @@ MonoBehaviour:
     type: 3}
   btn_next: {fileID: 1193830317}
   btn_prev: {fileID: 1504243739}
+  start_position: {x: 0, y: 0}
 --- !u!1 &369967141
 GameObject:
   m_ObjectHideFlags: 0

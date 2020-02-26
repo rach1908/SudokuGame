@@ -9,6 +9,7 @@ public class LevelSelect : MonoBehaviour
     public GameObject sudoku_level;
     public GameObject btn_next;
     public GameObject btn_prev;
+    public Vector2 start_position = new Vector2(0.0f, 0.0f);
     private int entries_per_line;
     //starts at 0
     private int current_page;
@@ -56,6 +57,7 @@ public class LevelSelect : MonoBehaviour
             sudoku_levels_.Add(Instantiate(sudoku_level) as GameObject);
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().sudoku_level = sudoku;
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText();
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().Button.GetComponentInChildren<Text>().text = sudoku_levels_.Count.ToString();
             sudoku_levels_[sudoku_levels_.Count - 1].transform.SetParent(this.transform, false);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.localScale = new Vector3(0, 0, 0);
         }
@@ -81,15 +83,22 @@ public class LevelSelect : MonoBehaviour
             Debug.Log("The page of levelselect that was requested is out of range of the index");
             Debug.Log(sudokus_.Count);
         }
+        //Removing any on-screen levels by decreasing size to 0:
+        foreach (GameObject obj in sudoku_levels_)
+        {
+            obj.transform.localScale = new Vector3(0, 0, 0);
+
+        }
         //Placement
+        start_position.y = Screen.height;
         Vector2 offset = new Vector2();
-        offset.x = Screen.width / (entries_per_line + 1);
-        offset.y = Screen.height / (entries_per_line + 1);
+        offset.x = Screen.width / (entries_per_line + 3);
+        offset.y = Screen.height / (entries_per_line + 3);
         for (int i = 0; i < current_sudokus_.Count; i++)
         {
             current_sudokus_[i].transform.localScale = new Vector3(1, 1, 1);
-            current_sudokus_[i].GetComponent<RectTransform>().anchoredPosition = 
-                new Vector3(offset.x * ((i % entries_per_line) + 1) , offset.y * ((i / entries_per_line) + 1));
+            current_sudokus_[i].GetComponent<RectTransform>().position = 
+                new Vector3(start_position.x + offset.x * ((i % entries_per_line) + 1) , start_position.y  - offset.y * ((i / entries_per_line) + 1));
         }
     }
 

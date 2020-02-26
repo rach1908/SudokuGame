@@ -32,7 +32,8 @@ public class Options : MonoBehaviour
         c_tile_highlighted,
         c_text_given,
         c_text_input,
-        error_highlighting
+        error_highlighting,
+        level_page
     }
     // Start is called before the first frame update
     void Start()
