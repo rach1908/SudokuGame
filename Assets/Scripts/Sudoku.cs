@@ -8,8 +8,6 @@ using static LevelSelect;
 public class Sudoku
 {
     public static Sudoku current;
-    public GameObject Button;
-    public GameObject text;
     private Difficulty difficulty;
     public string sudoku_string;
     private bool finished;
@@ -47,19 +45,21 @@ public class Sudoku
         sudoku_string = Sud_string;
     }
     
-    private void GenerateText()
+    public string GenerateText()
     {
+        string returner = "";
         if (player_prog_numbers == null && player_prog_centers == null && player_prog_corners == null)
         {
-            text.GetComponent<Text>().text = "Not Started";
+            returner = "Not Started";
         }
         else if (!finished)
         {
-            text.GetComponent<Text>().text = "In Progress";
+            returner = "In Progress";
         }
         else
         {
-            text.GetComponent<Text>().text = "Finished";
+            returner = "Finished";
         }
+        return returner;
     }
 }

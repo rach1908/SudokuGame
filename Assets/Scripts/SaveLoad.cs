@@ -8,22 +8,23 @@ using System;
 public static class SaveLoad
 {
     public static List<Sudoku> sudokus_ = new List<Sudoku>();
-    //!!IMPORTANT!! Sudoku.current MUST BE SET WHEN THE LEVEL IS LOADED!!
+    //!!IMPORTANT!! Sudoku.current MUST BE SET WHEN THE LEVEL IS LOADED (IE the scene is switched)!!
     public static void Save()
     {
         sudokus_.Add(Sudoku.current);
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open("./levels.lvl", FileMode.OpenOrCreate);
+        FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl", FileMode.OpenOrCreate);
         bf.Serialize(file, sudokus_);
+        
         file.Close();
     }
 
     public static List<Sudoku> Load()
     {
-        if (File.Exists("./levels.lvl"))
+        if (File.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open("./levels.lvl", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl", FileMode.Open);
             sudokus_ = (List<Sudoku>)bf.Deserialize(file);
             file.Close();
             return sudokus_;

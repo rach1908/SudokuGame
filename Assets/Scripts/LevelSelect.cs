@@ -33,6 +33,9 @@ public class LevelSelect : MonoBehaviour
         btn_prev.GetComponent<Button>().interactable = false;
         SpawnSudoku_Levels();
         PositionSudoku_Levels();
+        Debug.Log(sudokus_.Count);
+        Debug.Log(Screen.width);
+        Debug.Log(Screen.height);
     }
 
     // Update is called once per frame
@@ -51,6 +54,8 @@ public class LevelSelect : MonoBehaviour
         foreach (Sudoku sudoku in sudokus_)
         {
             sudoku_levels_.Add(Instantiate(sudoku_level) as GameObject);
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().sudoku_level = sudoku;
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText();
             sudoku_levels_[sudoku_levels_.Count - 1].transform.SetParent(this.transform, false);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.localScale = new Vector3(0, 0, 0);
         }
@@ -58,7 +63,7 @@ public class LevelSelect : MonoBehaviour
 
     private void PositionSudoku_Levels()
     {
-        //Generating list of sudoku objects to be placed on the current page
+        //Generating list of Level objects to be placed on the current page
         List<GameObject> current_sudokus_ = new List<GameObject>();
         if ((current_page + 1) * entries_per_line * entries_per_line <= sudokus_.Count)
         {
