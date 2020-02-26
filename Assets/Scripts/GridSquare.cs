@@ -97,6 +97,22 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             DisplayText();
         }
     }
+    public int Number_
+    {
+        get { return number_; }
+        set { number_ = value; }
+    }
+    public List<int> Corner_marks_
+    {
+        get { return corner_marks_; }
+        set { corner_marks_ = value; }
+    }
+
+    public List<int> Center_marks_
+    {
+        get { return center_marks_; }
+        set { center_marks_ = value; }
+    }
 
     public void ToggleCenterMark(int number)
     {

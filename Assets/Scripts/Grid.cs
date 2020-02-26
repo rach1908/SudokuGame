@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static Options;
@@ -30,15 +32,14 @@ public class Grid : MonoBehaviour
         {
             all_squares_.Add(game.GetComponent<GridSquare>());
         }
-        //Easy test: 759300000800040360604000005300205001060974050900803006100000504098030002000002189
-        //This will recieve data from the Level Select Menu
-        FillGrid("759300000800040360604000005300205001060974050900803006100000504098030002000002189");
+        //This will recieve data from the Sudoku.current object
+        FillGrid(Sudoku.current.sudoku_string, Sudoku.current.Player_prog_numbers, Sudoku.current.Player_prog_corners, Sudoku.current.Player_prog_centers);
         foreach (GridSquare gridSquare in all_squares_)
         {
             gridSquare.ColorTheme(
                 PlayerPrefs.GetString(pref_keys.c_tile_default.ToString()),
                 PlayerPrefs.GetString(pref_keys.c_tile_highlighted.ToString()),
-                PlayerPrefs.GetString(pref_keys.c_text_input.ToString()), 
+                PlayerPrefs.GetString(pref_keys.c_text_input.ToString()),
                 PlayerPrefs.GetString(pref_keys.c_text_given.ToString())
                 );
         }
@@ -55,7 +56,7 @@ public class Grid : MonoBehaviour
     {
         SpawnGridSquares();
         SetSquarePosition();
-        
+
     }
 
     private void SpawnGridSquares()
@@ -69,7 +70,7 @@ public class Grid : MonoBehaviour
                 grid_squares_[grid_squares_.Count - 1].transform.localScale = new Vector3(square_scale, square_scale);
             }
         }
-        
+
     }
 
     private void SetSquarePosition()
@@ -164,12 +165,14 @@ public class Grid : MonoBehaviour
         }
     }
 
-    private void FillGrid(string sudokuString)
+    private void FillGrid(string sudokuString, string player_prog_numbers, string player_prog_corners, string player_prog_centers)
     {
         if (sudokuString.Length != length * length)
         {
             throw new ArgumentException("The string is not appropriate length");
         }
+
+        //Givens
         for (int i = 0; i < length * length; i++)
         {
             if (int.Parse(sudokuString[i].ToString()) != 0)
@@ -177,6 +180,37 @@ public class Grid : MonoBehaviour
                 grid_squares_[i].GetComponent<GridSquare>().SetNumber(int.Parse(sudokuString[i].ToString()));
                 grid_squares_[i].GetComponent<GridSquare>().given = true;
             }
+        }
+        //Player inputs
+        if (player_prog_numbers != null)
+        {
+            List<GridSquare> empties = all_squares_.Where(x => x.given == false).ToList();
+            string[] corners = player_prog_corners.Split(',');
+            string[] centers = player_prog_centers.Split(',');
+            for (int i = 0; i < empties.Count; i++)
+            {
+                empties[i].SetNumber(int.Parse(player_prog_numbers[i].ToString()));
+                if (centers[i].Length > 1)
+                {
+                    List<int> center_temp_ = new List<int>();
+                    foreach (char c in centers[i])
+                    {
+                        center_temp_.Add(int.Parse(c.ToString()));
+                    }
+                    empties[i].Center_marks_ = center_temp_;
+                }
+                if (corners[i].Length > 1)
+                {
+                    List<int> corner_temp_ = new List<int>();
+                    foreach (char c in corners[i])
+                    {
+                        corner_temp_.Add(int.Parse(c.ToString()));
+                    }
+                    empties[i].Corner_marks_ = corner_temp_;
+                }
+
+            }
+            
         }
     }
     public enum NumberPos
@@ -276,7 +310,7 @@ public class Grid : MonoBehaviour
                 case KeyCode.D:
                 case KeyCode.RightArrow:
                     //move right
-                    if (index % (root * root) == (root*root) - 1)
+                    if (index % (root * root) == (root * root) - 1)
                     {
                         target = all_squares_[index - 8];
                     }
@@ -321,5 +355,45 @@ public class Grid : MonoBehaviour
                 ReSelectSquare(target);
             }
         }
+    }
+
+    public static void CompilePlayer_prog()
+    {
+        string player_prog_numbers = null;
+        string player_prog_centers = null;
+        string player_prog_corners = null;
+        foreach (GridSquare gs in all_squares_.Where(x => x.given == false).ToList())
+        {
+            player_prog_numbers += gs.Number_.ToString();
+            if (gs.Center_marks_.Count != 0)
+            {
+                foreach (int i in gs.Center_marks_)
+                {
+                    player_prog_centers += i.ToString();
+                }
+                player_prog_centers += ",";
+            }
+            else
+            {
+                player_prog_centers += "0,";
+            }
+            if (gs.Corner_marks_.Count != 0)
+            {
+                foreach (int i in gs.Corner_marks_)
+                {
+                    player_prog_corners += i.ToString();
+                }
+                player_prog_centers += ",";
+            }
+            else
+            {
+                player_prog_corners += "0,";
+            }
+        }
+
+        Sudoku.current.Player_prog_numbers = player_prog_numbers;
+        Sudoku.current.Player_prog_corners = player_prog_corners;
+        Sudoku.current.Player_prog_centers = player_prog_centers;
+
     }
 }

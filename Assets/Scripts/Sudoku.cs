@@ -5,28 +5,61 @@ using UnityEngine.UI;
 using static LevelSelect;
 
 [System.Serializable]
-public class Sudoku : MonoBehaviour
+public class Sudoku
 {
     public static Sudoku current;
     public GameObject Button;
     public GameObject text;
     private Difficulty difficulty;
     public string sudoku_string;
-    private string player_prog_string;
+    private bool finished;
+    private string player_prog_numbers;
+    private string player_prog_corners;
+    private string player_prog_centers;
+
+    public bool Finished
+    {
+        get { return finished; }
+        set { finished = value; }
+    }
+
+    public string Player_prog_numbers
+    {
+        get { return player_prog_numbers; }
+        set { player_prog_numbers = value; }
+    }
+
+    public string Player_prog_corners
+    {
+        get { return player_prog_corners; }
+        set { player_prog_corners = value; }
+    }
+    public string Player_prog_centers
+    {
+        get { return player_prog_centers; }
+        set { player_prog_centers = value; }
+    }
+
+
     public Sudoku(string Sud_string, Difficulty dif)
     {
         difficulty = dif;
         sudoku_string = Sud_string;
     }
-    private enum progress
-    {
-        
-    }
+    
     private void GenerateText()
     {
-        if (player_prog_string == null)
+        if (player_prog_numbers == null && player_prog_centers == null && player_prog_corners == null)
         {
-            text.GetComponent<Text>().text = " ";
+            text.GetComponent<Text>().text = "Not Started";
+        }
+        else if (!finished)
+        {
+            text.GetComponent<Text>().text = "In Progress";
+        }
+        else
+        {
+            text.GetComponent<Text>().text = "Finished";
         }
     }
 }

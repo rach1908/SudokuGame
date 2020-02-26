@@ -13,7 +13,7 @@ public static class SaveLoad
     {
         sudokus_.Add(Sudoku.current);
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create("./levels.lvl");
+        FileStream file = File.Open("./levels.lvl", FileMode.OpenOrCreate);
         bf.Serialize(file, sudokus_);
         file.Close();
     }

@@ -23,9 +23,9 @@ public class LevelSelect : MonoBehaviour
         {
             sudokus_ = SaveLoad.Load();
         }
-        catch (System.Exception e)
+        catch (System.ArgumentException e)
         {
-            Debug.Log(e.Message);   
+            Debug.Log(e.Message);
         }
         //Should be loaded from playerprefs or somesuch
         current_page = 0;
@@ -74,6 +74,7 @@ public class LevelSelect : MonoBehaviour
         else
         {
             Debug.Log("The page of levelselect that was requested is out of range of the index");
+            Debug.Log(sudokus_.Count);
         }
         //Placement
         Vector2 offset = new Vector2();
