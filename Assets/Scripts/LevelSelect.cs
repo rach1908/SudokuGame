@@ -37,6 +37,7 @@ public class LevelSelect : MonoBehaviour
         Debug.Log(sudokus_.Count);
         Debug.Log(Screen.width);
         Debug.Log(Screen.height);
+
     }
 
     // Update is called once per frame
@@ -56,8 +57,7 @@ public class LevelSelect : MonoBehaviour
         {
             sudoku_levels_.Add(Instantiate(sudoku_level) as GameObject);
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().sudoku_level = sudoku;
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText();
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().Button.GetComponentInChildren<Text>().text = sudoku_levels_.Count.ToString();
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText(sudoku_levels_.Count);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.SetParent(this.transform, false);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.localScale = new Vector3(0, 0, 0);
         }

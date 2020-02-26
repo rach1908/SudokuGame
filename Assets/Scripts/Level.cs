@@ -14,8 +14,9 @@ public class Level : MonoBehaviour
         //Button.GetComponent<Button>().onClick.AddListener();
     }
 
-    public void CreateText()
+    public void CreateText(int i)
     {
         Text.GetComponent<Text>().text = sudoku_level.GenerateText();
+        Button.GetComponentInChildren<Text>().text = sudoku_level.dif.ToString() + " " + i.ToString();
     }
 }

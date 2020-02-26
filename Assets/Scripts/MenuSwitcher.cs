@@ -39,6 +39,10 @@ public class MenuSwitcher : MonoBehaviour
         button_htpToMain.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
         button_optToMain.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
         button_lvlToMain.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
+        //Setting all but the main canvas to unactive
+        TutorialCanvas.gameObject.SetActive(false);
+        OptionsCanvas.gameObject.SetActive(false);
+        LevelSelectCanvas.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -55,25 +59,26 @@ public class MenuSwitcher : MonoBehaviour
     }
     private void ChangeMenu(menus menu)
     {
+        
         if (current_menu != menu)
         {
             foreach (Canvas canvas in all_menus)
             {
-                canvas.sortingOrder = 0;
+                canvas.gameObject.SetActive(false);
             }
             switch (menu)
             {
                 case menus.Main:
-                    MainCanvas.GetComponent<Canvas>().sortingOrder = 1;
+                    MainCanvas.gameObject.SetActive(true);
                     break;
                 case menus.HowToPlay:
-                    TutorialCanvas.GetComponent<Canvas>().sortingOrder = 1;
+                    TutorialCanvas.gameObject.SetActive(true);
                     break;
                 case menus.Options:
-                    OptionsCanvas.GetComponent<Canvas>().sortingOrder = 1;
+                    OptionsCanvas.gameObject.SetActive(true);
                     break;
                 case menus.LevelSelect:
-                    LevelSelectCanvas.GetComponent<Canvas>().sortingOrder = 1;
+                    LevelSelectCanvas.gameObject.SetActive(true);
                     break;
                 default:
                     Debug.Log("An option in the 'menus' enum does not have a corresponding option in the switch in ChangeMenu() - MenuSwitcher.cs");
