@@ -34,10 +34,6 @@ public class LevelSelect : MonoBehaviour
         btn_prev.GetComponent<Button>().interactable = false;
         SpawnSudoku_Levels();
         PositionSudoku_Levels();
-        Debug.Log(sudokus_.Count);
-        Debug.Log(Screen.width);
-        Debug.Log(Screen.height);
-
     }
 
     // Update is called once per frame

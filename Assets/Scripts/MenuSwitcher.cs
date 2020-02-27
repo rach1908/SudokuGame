@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MenuSwitcher : MonoBehaviour
 {
+    public GameObject Master_canvas;
     public GameObject TutorialCanvas;
     public GameObject MainCanvas;
     public GameObject OptionsCanvas;
@@ -12,9 +13,7 @@ public class MenuSwitcher : MonoBehaviour
     public GameObject button_lvlselect;
     public GameObject button_options;
     public GameObject button_HowToPlay;
-    public GameObject button_htpToMain;
-    public GameObject button_optToMain;
-    public GameObject button_lvlToMain;
+    public GameObject button_main;
     private menus current_menu;
     private List<Canvas> all_menus = new List<Canvas>();
 
@@ -36,13 +35,13 @@ public class MenuSwitcher : MonoBehaviour
         button_lvlselect.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.LevelSelect); });
         button_options.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Options); });
         button_HowToPlay.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.HowToPlay); });
-        button_htpToMain.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
-        button_optToMain.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
-        button_lvlToMain.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
+        button_main.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
         //Setting all but the main canvas to unactive
         TutorialCanvas.gameObject.SetActive(false);
         OptionsCanvas.gameObject.SetActive(false);
         LevelSelectCanvas.gameObject.SetActive(false);
+        button_main.gameObject.SetActive(false);
+        button_main.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 2 - (button_main.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height / 2 - (button_main.GetComponent<RectTransform>().rect.height / 2 + 25));
     }
 
     // Update is called once per frame
@@ -70,15 +69,19 @@ public class MenuSwitcher : MonoBehaviour
             {
                 case menus.Main:
                     MainCanvas.gameObject.SetActive(true);
+                    button_main.gameObject.SetActive(false);
                     break;
                 case menus.HowToPlay:
                     TutorialCanvas.gameObject.SetActive(true);
+                    button_main.gameObject.SetActive(true);
                     break;
                 case menus.Options:
                     OptionsCanvas.gameObject.SetActive(true);
+                    button_main.gameObject.SetActive(true);
                     break;
                 case menus.LevelSelect:
                     LevelSelectCanvas.gameObject.SetActive(true);
+                    button_main.gameObject.SetActive(true);
                     break;
                 default:
                     Debug.Log("An option in the 'menus' enum does not have a corresponding option in the switch in ChangeMenu() - MenuSwitcher.cs");
