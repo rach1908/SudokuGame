@@ -16,6 +16,7 @@ public class MenuPosition : MonoBehaviour
         MainSetup();
         TutorialSetup();
         LevelSetup();
+        OptionSetup();
     }
 
 
@@ -37,16 +38,24 @@ public class MenuPosition : MonoBehaviour
 
     public void OptionSetup()
     {
+        int row = Screen.height / 6;
         //Header text should be the first object in the OptionsCanvas
-        Options_Canvas.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 2, Screen.height / 6 * 5);
-        Button[] buttons = Options_Canvas.GetComponentsInChildren<Button>();
-        for (int i = 0; i < buttons.Length; i++)
+        Options_Canvas.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 2, row * 5);
+        //List of all the canvases used as folders
+        Canvas[] canvi = Options_Canvas.GetComponentsInChildren<Canvas>();
+        Canvas colors = canvi[1];
+        Canvas error = canvi[2];
+        //Color settings
+        Button[] colorbuttons = colors.GetComponentsInChildren<Button>();
+        colors.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / (colorbuttons.Length + 2), row * 4);
+        for (int i = 0; i < colorbuttons.Length; i++)
         {
-            if (i + 1 != buttons.Length)
-            {
-                //??+
-            }
+            colorbuttons[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / (colorbuttons.Length + 2) * (i + 2), row * 4);
         }
+        //Error checking
+        error.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 5, row * 3);
+        error.GetComponentInChildren<Button>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 5 * 2, row * 3);
+        
     }
 
     public void LevelSetup()

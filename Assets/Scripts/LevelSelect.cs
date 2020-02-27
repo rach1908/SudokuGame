@@ -56,7 +56,7 @@ public class LevelSelect : MonoBehaviour
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText(sudoku_levels_.Count);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.SetParent(this.transform, false);
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.localScale = new Vector3(0, 0, 0);
         }
     }
@@ -90,8 +90,8 @@ public class LevelSelect : MonoBehaviour
         //Placement
         start_position.y = Screen.height;
         Vector2 offset = new Vector2();
-        offset.x = Screen.width / (entries_per_line + 3);
-        offset.y = Screen.height / (entries_per_line + 3);
+        offset.x = Screen.width / (entries_per_line + 1);
+        offset.y = Screen.height / (entries_per_line + 2);
         for (int i = 0; i < current_sudokus_.Count; i++)
         {
             current_sudokus_[i].transform.localScale = new Vector3(1, 1, 1);
