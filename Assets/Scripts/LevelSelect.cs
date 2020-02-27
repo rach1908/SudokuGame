@@ -55,6 +55,8 @@ public class LevelSelect : MonoBehaviour
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().sudoku_level = sudoku;
             sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText(sudoku_levels_.Count);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.SetParent(this.transform, false);
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
             sudoku_levels_[sudoku_levels_.Count - 1].transform.localScale = new Vector3(0, 0, 0);
         }
     }

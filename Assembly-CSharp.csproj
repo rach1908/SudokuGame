@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Level.cs" />
     <Compile Include="Assets\Scripts\LevelSelect.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\MenuPosition.cs" />
     <Compile Include="Assets\Scripts\MenuSwitcher.cs" />
     <Compile Include="Assets\Scripts\Options.cs" />
     <Compile Include="Assets\Scripts\SaveLoad.cs" />

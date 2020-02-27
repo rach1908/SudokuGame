@@ -41,7 +41,7 @@ public class MenuSwitcher : MonoBehaviour
         OptionsCanvas.gameObject.SetActive(false);
         LevelSelectCanvas.gameObject.SetActive(false);
         button_main.gameObject.SetActive(false);
-        button_main.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 2 - (button_main.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height / 2 - (button_main.GetComponent<RectTransform>().rect.height / 2 + 25));
+        button_main.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width - (button_main.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height - (button_main.GetComponent<RectTransform>().rect.height / 2 + 25));
     }
 
     // Update is called once per frame
