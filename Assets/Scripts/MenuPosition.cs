@@ -14,6 +14,8 @@ public class MenuPosition : MonoBehaviour
     void Start()
     {
         MainSetup();
+        TutorialSetup();
+        LevelSetup();
     }
 
 
@@ -30,16 +32,29 @@ public class MenuPosition : MonoBehaviour
 
     public void TutorialSetup()
     {
-
+        Tutorial_Canvas.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 2, Screen.height / 5 * 4);
     }
 
     public void OptionSetup()
     {
-
+        //Header text should be the first object in the OptionsCanvas
+        Options_Canvas.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 2, Screen.height / 6 * 5);
+        Button[] buttons = Options_Canvas.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (i + 1 != buttons.Length)
+            {
+                //??+
+            }
+        }
     }
 
     public void LevelSetup()
     {
-
+        Button[] buttons = Level_Canvas.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 7 * (i == 0 ? 1 : 6), Screen.height / 8);
+        }
     }
 }
