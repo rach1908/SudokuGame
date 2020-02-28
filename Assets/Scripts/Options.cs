@@ -33,7 +33,11 @@ public class Options : MonoBehaviour
         c_text_given,
         c_text_input,
         error_highlighting,
-        level_page
+        level_page_all,
+        level_page_easy,
+        level_page_medium,
+        level_page_hard,
+        selected_difficulty
     }
     // Start is called before the first frame update
     void Start()

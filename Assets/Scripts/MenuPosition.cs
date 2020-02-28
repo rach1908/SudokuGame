@@ -55,7 +55,7 @@ public class MenuPosition : MonoBehaviour
         //Error checking
         error.GetComponentInChildren<Text>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 5, row * 3);
         error.GetComponentInChildren<Button>().GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 5 * 2, row * 3);
-        
+
     }
 
     public void LevelSetup()
@@ -63,7 +63,14 @@ public class MenuPosition : MonoBehaviour
         Button[] buttons = Level_Canvas.GetComponentsInChildren<Button>();
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 7 * (i == 0 ? 1 : 6), Screen.height / 8);
+            if (buttons[i].transform.parent == null)//!= buttons[i].GetComponentInParent<Level>().transform)
+            {
+                buttons[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width / 7 * (i == 0 ? 1 : 6), Screen.height / 8);
+            }
         }
+        Level_Canvas.GetComponentInChildren<Dropdown>().GetComponent<RectTransform>().anchoredPosition =
+            new Vector3(Level_Canvas.GetComponentInChildren<Dropdown>().GetComponent<RectTransform>().rect.width / 2 + 25,
+            Screen.height - (Level_Canvas.GetComponentInChildren<Dropdown>().GetComponent<RectTransform>().rect.height / 2 + 25));
+
     }
 }
