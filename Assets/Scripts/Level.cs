@@ -11,7 +11,6 @@ public class Level : MonoBehaviour
    
     void Start()
     {
-        //Button.GetComponent<Button>().onClick.AddListener();
     }
 
     public void CreateText(int i)

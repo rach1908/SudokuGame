@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Options;
 
-public class LevelSelect : MonoBehaviour, IPointerDownHandler
+public class LevelSelect : MonoBehaviour
 {
     public GameObject sudoku_level;
     public GameObject btn_next;
@@ -33,6 +34,10 @@ public class LevelSelect : MonoBehaviour, IPointerDownHandler
         }
         btn_next.GetComponent<Button>().onClick.AddListener(delegate { ChangePage(true); });
         btn_prev.GetComponent<Button>().onClick.AddListener(delegate { ChangePage(false); });
+        if (DataPassing.sudoku_ != null)
+        {
+            SaveLoad.Save(DataPassing.sudoku_);
+        }
         try
         {
             sudokus_ = SaveLoad.Load();
@@ -85,11 +90,31 @@ public class LevelSelect : MonoBehaviour, IPointerDownHandler
         
     }
 
-    
+
     public enum Difficulty{
         Easy,
         Medium,
         Hard
+    }
+
+    private void RecreateSudokuFile()
+    {
+        ////Base Levels
+        List<Sudoku> suds = new List<Sudoku>() {
+            new Sudoku("060501800473002005501000024810600000090000030357020601005207480946100750008900010", LevelSelect.Difficulty.Easy),
+            new Sudoku("000409802570380004000002500328017060057930000900020730780100000605208007094073050", LevelSelect.Difficulty.Easy),
+            new Sudoku("759300000800040360604000005300205001060974050900803006100000504098030002000002189", LevelSelect.Difficulty.Easy),
+            new Sudoku("400102680100090004038064010005071920026009800800250000903000008250600107607905300", LevelSelect.Difficulty.Easy),
+            new Sudoku("000900005406500800700800100002150308080037000004200061501020004049300000000000610", LevelSelect.Difficulty.Medium),
+            new Sudoku("070900400065000908000180000200406150040008306000003000400500072700040001306000509", LevelSelect.Difficulty.Medium),
+            new Sudoku("070030200005002900400900000004205090010390706200000005192700030047500100000103000", LevelSelect.Difficulty.Medium),
+            new Sudoku("060420085000000374410308000007800096306700000000006050070900500000250000040013800", LevelSelect.Difficulty.Medium),
+            new Sudoku("003600000900800207000000000040150830070004000820000000090005308500760400000000560", LevelSelect.Difficulty.Hard),
+            new Sudoku("000247000000100070197003500000001003050000060000000908605000004030908000009070300", LevelSelect.Difficulty.Hard),
+            new Sudoku("000700340000005071047000006056010020200000900710000003500070000400060590000530064", LevelSelect.Difficulty.Hard)
+        };
+
+        SaveLoad.ReMakeSave(suds);
     }
 
     private void SpawnSudoku_Levels()
@@ -97,12 +122,14 @@ public class LevelSelect : MonoBehaviour, IPointerDownHandler
         foreach (Sudoku sudoku in sudokus_)
         {
             sudoku_levels_.Add(Instantiate(sudoku_level) as GameObject);
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().sudoku_level = sudoku;
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<Level>().CreateText(sudoku_levels_.Count);
-            sudoku_levels_[sudoku_levels_.Count - 1].transform.SetParent(this.transform, false);
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
-            sudoku_levels_[sudoku_levels_.Count - 1].GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
-            sudoku_levels_[sudoku_levels_.Count - 1].transform.localScale = new Vector3(0, 0, 0);
+            GameObject sudlvl = sudoku_levels_[sudoku_levels_.Count - 1];
+            sudlvl.GetComponent<Level>().sudoku_level = sudoku;
+            sudlvl.GetComponent<Level>().CreateText(sudoku_levels_.Count);
+            sudlvl.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectLevel(sudlvl.GetComponent<Level>()); });
+            sudlvl.transform.SetParent(this.transform, false);
+            sudlvl.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            sudlvl.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            sudlvl.transform.localScale = new Vector3(0, 0, 0);
         }
     }
 
@@ -234,16 +261,8 @@ public class LevelSelect : MonoBehaviour, IPointerDownHandler
 
     private void SelectLevel(Level lvl)
     {
-        Debug.Log(sudokus_.IndexOf(lvl.sudoku_level));
+        DataPassing.sudoku_ = lvl.sudoku_level;
+        SceneManager.LoadScene("GameScene");
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("Before");
-        if (eventData.selectedObject != null && eventData.selectedObject.transform.parent != null && eventData.selectedObject.GetComponentInParent<Level>() != null)
-        {
-            Debug.Log("after");
-            SelectLevel(eventData.selectedObject.GetComponentInParent<Level>());
-        }
-    }
 }

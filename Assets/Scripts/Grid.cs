@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Options;
 
@@ -12,9 +13,9 @@ public class Grid : MonoBehaviour
     //Determines the side lenght of the sudoku. Length must be a squared number, will be set ingame, drop down menu possibly (anything above 8^2 seems to slow down the game considerably, 13^2 almost made unity crash). Must be at least 4
     public int length = 0;
     public GameObject grid_square;
+    public GameObject btn_Menu;
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
     public float square_scale = 1.0f;
-
     private static int root = 0;
     private static List<GameObject> grid_squares_ = new List<GameObject>();
     public static List<GridSquare> selected_squares_ = new List<GridSquare>();
@@ -22,7 +23,11 @@ public class Grid : MonoBehaviour
 
     void Start()
     {
+        SceneManager.LoadScene("MetaScene", LoadSceneMode.Additive);
         root = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
+        grid_squares_ = new List<GameObject>();
+        all_squares_ = new List<GridSquare>();
+        selected_squares_ = new List<GridSquare>();
         CreateGrid();
         if (grid_square.GetComponent<GridSquare>() == null)
         {
@@ -32,8 +37,11 @@ public class Grid : MonoBehaviour
         {
             all_squares_.Add(game.GetComponent<GridSquare>());
         }
+        //Return to menu button setup
+        btn_Menu.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width - (btn_Menu.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height - (btn_Menu.GetComponent<RectTransform>().rect.height / 2 +25));
+        btn_Menu.GetComponent<Button>().onClick.AddListener(ReturnToMenu);
         //This will recieve data from the Sudoku.current object
-        FillGrid(Sudoku.current.sudoku_string, Sudoku.current.Player_prog_numbers, Sudoku.current.Player_prog_corners, Sudoku.current.Player_prog_centers);
+        FillGrid(DataPassing.sudoku_.sudoku_string, DataPassing.sudoku_.Player_prog_numbers, DataPassing.sudoku_.Player_prog_corners, DataPassing.sudoku_.Player_prog_centers);
         foreach (GridSquare gridSquare in all_squares_)
         {
             gridSquare.ColorTheme(
@@ -43,6 +51,7 @@ public class Grid : MonoBehaviour
                 PlayerPrefs.GetString(pref_keys.c_text_given.ToString())
                 );
         }
+       
     }
 
 
@@ -58,7 +67,11 @@ public class Grid : MonoBehaviour
         SetSquarePosition();
 
     }
-
+    private void ReturnToMenu()
+    {
+        CompilePlayer_prog();
+        SceneManager.LoadScene("MenuScene");
+    }
     private void SpawnGridSquares()
     {
         for (int row = 0; row < length; row++)
@@ -187,6 +200,10 @@ public class Grid : MonoBehaviour
             List<GridSquare> empties = all_squares_.Where(x => x.given == false).ToList();
             string[] corners = player_prog_corners.Split(',');
             string[] centers = player_prog_centers.Split(',');
+            Debug.Log(corners.Length);
+            Debug.Log(centers.Length);
+
+
             for (int i = 0; i < empties.Count; i++)
             {
                 empties[i].SetNumber(int.Parse(player_prog_numbers[i].ToString()));
@@ -199,6 +216,10 @@ public class Grid : MonoBehaviour
                     }
                     empties[i].Center_marks_ = center_temp_;
                 }
+                else if (int.Parse(centers[i][0].ToString()) != 0)
+                {
+                    empties[i].Center_marks_ = new List<int>() { int.Parse(centers[i][0].ToString()) };
+                }
                 if (corners[i].Length > 1)
                 {
                     List<int> corner_temp_ = new List<int>();
@@ -207,6 +228,10 @@ public class Grid : MonoBehaviour
                         corner_temp_.Add(int.Parse(c.ToString()));
                     }
                     empties[i].Corner_marks_ = corner_temp_;
+                }
+                else if (int.Parse(corners[i][0].ToString()) != 0)
+                {
+                    empties[i].Corner_marks_ = new List<int>() { int.Parse(centers[i][0].ToString()) };
                 }
 
             }
@@ -390,10 +415,10 @@ public class Grid : MonoBehaviour
                 player_prog_corners += "0,";
             }
         }
-
-        Sudoku.current.Player_prog_numbers = player_prog_numbers;
-        Sudoku.current.Player_prog_corners = player_prog_corners;
-        Sudoku.current.Player_prog_centers = player_prog_centers;
+        char[] trimChars = { ',' };
+        DataPassing.sudoku_.Player_prog_numbers = player_prog_numbers;
+        DataPassing.sudoku_.Player_prog_corners = player_prog_corners.TrimEnd(trimChars);
+        DataPassing.sudoku_.Player_prog_centers = player_prog_centers.TrimEnd(trimChars);
 
     }
 }

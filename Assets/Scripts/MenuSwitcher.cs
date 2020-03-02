@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuSwitcher : MonoBehaviour
@@ -18,7 +20,7 @@ public class MenuSwitcher : MonoBehaviour
     private List<Canvas> all_menus = new List<Canvas>();
 
     //To keep track of which menu is selected. If more menus are added, a corresponding option must be added to this Enum aswell
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,7 @@ public class MenuSwitcher : MonoBehaviour
         button_options.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Options); });
         button_HowToPlay.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.HowToPlay); });
         button_main.GetComponent<Button>().onClick.AddListener(delegate { ChangeMenu(menus.Main); });
+        
         //Setting all but the main canvas to unactive
         TutorialCanvas.gameObject.SetActive(false);
         OptionsCanvas.gameObject.SetActive(false);
@@ -47,7 +50,7 @@ public class MenuSwitcher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private enum menus
     {
@@ -58,36 +61,42 @@ public class MenuSwitcher : MonoBehaviour
     }
     private void ChangeMenu(menus menu)
     {
-        
-        if (current_menu != menu)
+        if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            foreach (Canvas canvas in all_menus)
+            SceneManager.LoadScene("MenuScene");
+        }
+        else if (SceneManager.GetActiveScene().name == "MenuScene") 
+        {
+            if (current_menu != menu)
             {
-                canvas.gameObject.SetActive(false);
+                foreach (Canvas canvas in all_menus)
+                {
+                    canvas.gameObject.SetActive(false);
+                }
+                switch (menu)
+                {
+                    case menus.Main:
+                        MainCanvas.gameObject.SetActive(true);
+                        button_main.gameObject.SetActive(false);
+                        break;
+                    case menus.HowToPlay:
+                        TutorialCanvas.gameObject.SetActive(true);
+                        button_main.gameObject.SetActive(true);
+                        break;
+                    case menus.Options:
+                        OptionsCanvas.gameObject.SetActive(true);
+                        button_main.gameObject.SetActive(true);
+                        break;
+                    case menus.LevelSelect:
+                        LevelSelectCanvas.gameObject.SetActive(true);
+                        button_main.gameObject.SetActive(true);
+                        break;
+                    default:
+                        Debug.Log("An option in the 'menus' enum does not have a corresponding option in the switch in ChangeMenu() - MenuSwitcher.cs");
+                        break;
+                }
+                current_menu = menu;
             }
-            switch (menu)
-            {
-                case menus.Main:
-                    MainCanvas.gameObject.SetActive(true);
-                    button_main.gameObject.SetActive(false);
-                    break;
-                case menus.HowToPlay:
-                    TutorialCanvas.gameObject.SetActive(true);
-                    button_main.gameObject.SetActive(true);
-                    break;
-                case menus.Options:
-                    OptionsCanvas.gameObject.SetActive(true);
-                    button_main.gameObject.SetActive(true);
-                    break;
-                case menus.LevelSelect:
-                    LevelSelectCanvas.gameObject.SetActive(true);
-                    button_main.gameObject.SetActive(true);
-                    break;
-                default:
-                    Debug.Log("An option in the 'menus' enum does not have a corresponding option in the switch in ChangeMenu() - MenuSwitcher.cs");
-                    break;
-            }
-            current_menu = menu;
         }
     }
 }

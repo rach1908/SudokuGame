@@ -8,10 +8,10 @@ using System;
 public static class SaveLoad
 {
     public static List<Sudoku> sudokus_ = new List<Sudoku>();
-    //!!IMPORTANT!! Sudoku.current MUST BE SET WHEN THE LEVEL IS LOADED (IE the scene is switched)!!
-    public static void Save()
+    //Saves all changes made to Sudokus in the system
+    public static void Save(Sudoku sudoku)
     {
-        sudokus_.Add(Sudoku.current);
+        sudokus_[sudokus_.IndexOf(sudokus_.Find(x => x.sudoku_string == sudoku.sudoku_string))] = sudoku;
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl", FileMode.OpenOrCreate);
         bf.Serialize(file, sudokus_);
@@ -19,6 +19,23 @@ public static class SaveLoad
         file.Close();
     }
 
+    public static void SaveNew(List<Sudoku> list)
+    {
+        sudokus_.AddRange(list);
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl", FileMode.OpenOrCreate);
+        bf.Serialize(file, sudokus_);
+
+        file.Close();
+    }
+
+    public static void ReMakeSave(List<Sudoku> list)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl", FileMode.OpenOrCreate);
+        bf.Serialize(file, list);
+        file.Close();
+    }
     public static List<Sudoku> Load()
     {
         if (File.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "levels.lvl"))

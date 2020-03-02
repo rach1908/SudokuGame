@@ -7,7 +7,6 @@ using static LevelSelect;
 [System.Serializable]
 public class Sudoku
 {
-    public static Sudoku current;
     private Difficulty difficulty;
     public string sudoku_string;
     private bool finished;
