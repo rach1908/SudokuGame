@@ -97,6 +97,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             number_ = number;
             DisplayText();
         }
+        Grid.NumberChanged(this);
     }
     public int Number_
     {

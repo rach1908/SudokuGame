@@ -12,7 +12,7 @@ using static Options;
 public class Grid : MonoBehaviour, IPointerDownHandler
 {
     //Determines the side lenght of the sudoku. Length must be a squared number, will be set ingame, drop down menu possibly (anything above 8^2 seems to slow down the game considerably, 13^2 almost made unity crash). Must be at least 4
-    public int length = 0;
+    public static int length = 0;
     public GameObject grid_square;
     public GameObject btn_Menu;
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
@@ -22,7 +22,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     private static List<GameObject> grid_squares_ = new List<GameObject>();
     public static List<GridSquare> selected_squares_ = new List<GridSquare>();
     public static List<GridSquare> all_squares_ = new List<GridSquare>();
-    private int sudoku_width;
+    private static int sudoku_width;
 
     void Start()
     {
@@ -42,7 +42,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
             all_squares_.Add(game.GetComponent<GridSquare>());
         }
         //Return to menu button setup
-        btn_Menu.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width - (btn_Menu.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height - (btn_Menu.GetComponent<RectTransform>().rect.height / 2 +25));
+        btn_Menu.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width - (btn_Menu.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height - (btn_Menu.GetComponent<RectTransform>().rect.height / 2 + 25));
         btn_Menu.GetComponent<Button>().onClick.AddListener(ReturnToMenu);
         //This will recieve data from the Sudoku.current object
         FillGrid(DataPassing.sudoku_.sudoku_string, DataPassing.sudoku_.Player_prog_numbers, DataPassing.sudoku_.Player_prog_corners, DataPassing.sudoku_.Player_prog_centers);
@@ -55,7 +55,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 PlayerPrefs.GetString(pref_keys.c_text_given.ToString())
                 );
         }
-       
+
     }
 
 
@@ -70,14 +70,13 @@ public class Grid : MonoBehaviour, IPointerDownHandler
         //sizing the grid relative to screen size
         if (Screen.height <= Screen.width)
         {
-            square_scale = (float.Parse(Screen.height.ToString()) * buffer)  / sudoku_width;
+            square_scale = (float.Parse(Screen.height.ToString()) * buffer) / sudoku_width;
         }
         else
         {
             square_scale = (float.Parse(Screen.width.ToString()) * buffer) / sudoku_width;
         }
         //Setting start position
-        Debug.Log($"Screen: {Screen.width} Sudoku width: {sudoku_width}");
         start_position.x = float.Parse(Screen.width.ToString()) / 2 - (float.Parse(sudoku_width.ToString()) * square_scale / 2 - 119 * square_scale / 2);
         start_position.y = float.Parse(Screen.height.ToString()) / 2 + (float.Parse(sudoku_width.ToString()) * square_scale / 2 - 119 * square_scale / 2);
         SpawnGridSquares();
@@ -393,6 +392,47 @@ public class Grid : MonoBehaviour, IPointerDownHandler
             {
                 ReSelectSquare(target);
             }
+        }
+    }
+
+    //Called by gridSquare whenever a number is changed
+    public static void NumberChanged(GridSquare gs)
+    {
+        switch (PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString()))
+        {
+            default:
+            case 0:
+                //No error highlighting
+                break;
+            case 1:
+                //Highlight obvious logical errors
+                int row = all_squares_.IndexOf(gs) / length;
+                int col = all_squares_.IndexOf(gs) % length;
+                int square = all_squares_.IndexOf(gs);
+                List<GridSquare> same_row_ = new List<GridSquare>();
+                List<GridSquare> same_col_ = new List<GridSquare>();
+                List<GridSquare> same_square_ = new List<GridSquare>();
+                for (int i = 0; i < length; i++)
+                {
+                    //Get all in same row
+                    same_row_.Add(all_squares_[i + row * length]);
+                    //Get all in same col
+                    same_col_.Add(all_squares_[i * 9 + col]);
+                }
+                if (same_row_.Where(x => x.Number_ == gs.Number_).Count() > 0)
+                {
+                    //The row has at least 2 identical numbers somewhere
+                    Debug.Log("Duplicate in row");
+                }
+                if (same_col_.Where(x => x.Number_ == gs.Number_).Count() > 0)
+                {
+                    //The column has at least 2 identical numbers somewhere
+                    Debug.Log("Duplicate in column");
+                }
+                break;
+            case 2:
+                //Highlight ALL error (will need solved sudoku for this
+                break;
         }
     }
 
