@@ -200,18 +200,18 @@ public class Grid : MonoBehaviour
             List<GridSquare> empties = all_squares_.Where(x => x.given == false).ToList();
             string[] corners = player_prog_corners.Split(',');
             string[] centers = player_prog_centers.Split(',');
-            Debug.Log(corners.Length);
-            Debug.Log(centers.Length);
 
 
             for (int i = 0; i < empties.Count; i++)
             {
+                empties[i].Number_ = int.Parse(player_prog_numbers[i].ToString());
                 if (centers[i].Length > 1)
                 {
                     List<int> center_temp_ = new List<int>();
                     foreach (char c in centers[i])
                     {
                         center_temp_.Add(int.Parse(c.ToString()));
+                        Debug.Log($"the square {i} contains the character {c}");
                     }
                     empties[i].Center_marks_ = center_temp_;
                 }
@@ -230,9 +230,9 @@ public class Grid : MonoBehaviour
                 }
                 else if (int.Parse(corners[i][0].ToString()) != 0)
                 {
-                    empties[i].Corner_marks_ = new List<int>() { int.Parse(centers[i][0].ToString()) };
+                    empties[i].Corner_marks_ = new List<int>() { int.Parse(corners[i][0].ToString()) };
                 }
-                empties[i].SetNumber(int.Parse(player_prog_numbers[i].ToString()));
+                empties[i].DisplayText();
             }
         }
     }
