@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Options;
 
-public class Grid : MonoBehaviour
+public class Grid : MonoBehaviour, IPointerDownHandler
 {
     //Determines the side lenght of the sudoku. Length must be a squared number, will be set ingame, drop down menu possibly (anything above 8^2 seems to slow down the game considerably, 13^2 almost made unity crash). Must be at least 4
     public int length = 0;
@@ -63,6 +64,8 @@ public class Grid : MonoBehaviour
 
     private void CreateGrid()
     {
+        //sizing the grid relative to screen size
+        square_scale = (float.Parse(Screen.height.ToString()) - 50)  / (119 * 6 + 117 * 3);
         SpawnGridSquares();
         SetSquarePosition();
 
@@ -211,7 +214,6 @@ public class Grid : MonoBehaviour
                     foreach (char c in centers[i])
                     {
                         center_temp_.Add(int.Parse(c.ToString()));
-                        Debug.Log($"the square {i} contains the character {c}");
                     }
                     empties[i].Center_marks_ = center_temp_;
                 }
@@ -418,5 +420,10 @@ public class Grid : MonoBehaviour
         DataPassing.sudoku_.Player_prog_corners = player_prog_corners.TrimEnd(trimChars);
         DataPassing.sudoku_.Player_prog_centers = player_prog_centers.TrimEnd(trimChars);
 
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("I just clicked" + eventData.selectedObject.name);
     }
 }
