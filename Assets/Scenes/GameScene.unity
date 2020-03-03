@@ -610,5 +610,5 @@ MonoBehaviour:
   grid_square: {fileID: 2242099987605308317, guid: 1e91a6c78c4db1f49aac67d4e3533818,
     type: 3}
   btn_Menu: {fileID: 608913446}
-  start_position: {x: -380, y: 400}
+  start_position: {x: 0, y: 0}
   square_scale: 0.8

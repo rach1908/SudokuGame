@@ -16,16 +16,19 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     public GameObject grid_square;
     public GameObject btn_Menu;
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
-    public float square_scale = 1.0f;
+    private float square_scale = 1.0f;
+    public float buffer = 0.85f;
     private static int root = 0;
     private static List<GameObject> grid_squares_ = new List<GameObject>();
     public static List<GridSquare> selected_squares_ = new List<GridSquare>();
     public static List<GridSquare> all_squares_ = new List<GridSquare>();
+    private int sudoku_width;
 
     void Start()
     {
-        SceneManager.LoadScene("MetaScene", LoadSceneMode.Additive);
         root = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
+        sudoku_width = (117 * root + 4) * root;
+        SceneManager.LoadScene("MetaScene", LoadSceneMode.Additive);
         grid_squares_ = new List<GameObject>();
         all_squares_ = new List<GridSquare>();
         selected_squares_ = new List<GridSquare>();
@@ -65,7 +68,18 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     private void CreateGrid()
     {
         //sizing the grid relative to screen size
-        square_scale = (float.Parse(Screen.height.ToString()) - 50)  / (119 * 6 + 117 * 3);
+        if (Screen.height <= Screen.width)
+        {
+            square_scale = (float.Parse(Screen.height.ToString()) * buffer)  / sudoku_width;
+        }
+        else
+        {
+            square_scale = (float.Parse(Screen.width.ToString()) * buffer) / sudoku_width;
+        }
+        //Setting start position
+        Debug.Log($"Screen: {Screen.width} Sudoku width: {sudoku_width}");
+        start_position.x = float.Parse(Screen.width.ToString()) / 2 - (float.Parse(sudoku_width.ToString()) * square_scale / 2 - 119 * square_scale / 2);
+        start_position.y = float.Parse(Screen.height.ToString()) / 2 + (float.Parse(sudoku_width.ToString()) * square_scale / 2 - 119 * square_scale / 2);
         SpawnGridSquares();
         SetSquarePosition();
 
