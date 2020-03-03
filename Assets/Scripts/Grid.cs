@@ -206,7 +206,6 @@ public class Grid : MonoBehaviour
 
             for (int i = 0; i < empties.Count; i++)
             {
-                empties[i].SetNumber(int.Parse(player_prog_numbers[i].ToString()));
                 if (centers[i].Length > 1)
                 {
                     List<int> center_temp_ = new List<int>();
@@ -233,9 +232,8 @@ public class Grid : MonoBehaviour
                 {
                     empties[i].Corner_marks_ = new List<int>() { int.Parse(centers[i][0].ToString()) };
                 }
-
+                empties[i].SetNumber(int.Parse(player_prog_numbers[i].ToString()));
             }
-            
         }
     }
     public enum NumberPos
@@ -408,7 +406,7 @@ public class Grid : MonoBehaviour
                 {
                     player_prog_corners += i.ToString();
                 }
-                player_prog_centers += ",";
+                player_prog_corners += ",";
             }
             else
             {

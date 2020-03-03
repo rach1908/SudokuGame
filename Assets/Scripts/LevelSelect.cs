@@ -24,6 +24,7 @@ public class LevelSelect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        RecreateSudokuFile();
         drop_dif.GetComponent<Dropdown>().onValueChanged.AddListener(delegate { DropdownChanged(drop_dif.GetComponent<Dropdown>().value); });
         //Adding text to the dropdown
         drop_dif.GetComponent<Dropdown>().options.Clear();

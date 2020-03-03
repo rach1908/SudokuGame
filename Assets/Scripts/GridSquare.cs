@@ -81,7 +81,8 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         {
             ColorUtility.TryParseHtmlString(givens, out TextColor);
         }
-            number_text.GetComponent<Text>().color = TextColor;
+        number_text.GetComponent<Text>().color = TextColor;
+        corner_text.GetComponent<Text>().color = TextColor;
     }
 
     public void SetNumber(int number)
