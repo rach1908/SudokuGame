@@ -408,6 +408,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 //Highlight obvious logical errors
                 int row = all_squares_.IndexOf(gs) / length;
                 int col = all_squares_.IndexOf(gs) % length;
+                //PICK UP HERE - Formula to get all gridsquares in the same nonnet
                 int square = all_squares_.IndexOf(gs);
                 List<GridSquare> same_row_ = new List<GridSquare>();
                 List<GridSquare> same_col_ = new List<GridSquare>();
