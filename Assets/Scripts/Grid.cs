@@ -26,6 +26,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
 
     void Start()
     {
+        length = int.Parse(Math.Sqrt(double.Parse(DataPassing.sudoku_.sudoku_string.Length.ToString())).ToString());
         root = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
         sudoku_width = (117 * root + 4) * root;
         SceneManager.LoadScene("MetaScene", LoadSceneMode.Additive);
@@ -422,27 +423,30 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                     same_row_.Add(all_squares_[i + row * length]);
                     //Get all in same col
                     same_col_.Add(all_squares_[i * 9 + col]);
-                    //Get all in same nonnet??????
-                    same_square_.Add(all_squares_[(squareband * root + squarestack * root) + length * (i / root)]);
+                    //Get all in same nonnet
+                    same_square_.Add(all_squares_[(squarestack * root + squareband * root * length) + (i % root) + (length * (i / root))]);
                 }
-                if (same_row_.Where(x => x.Number_ == gs.Number_).Count() > 0)
+                var known_keys = new HashSet<int>();
+                if (same_row_.Where(x => x.Number_ > 0).Any(item => !known_keys.Add(item.Number_)))
                 {
                     //The row has at least 2 identical numbers somewhere
                     Debug.Log("Duplicate in row");
                 }
-                if (same_col_.Where(x => x.Number_ == gs.Number_).Count() > 0)
+                known_keys = new HashSet<int>();
+                if (same_col_.Where(x => x.Number_ > 0).Any(item => !known_keys.Add(item.Number_)))
                 {
                     //The column has at least 2 identical numbers somewhere
                     Debug.Log("Duplicate in column");
                 }
-                if (same_square_.Where(x => x.Number_ == gs.Number_).Count() > 0)
+                known_keys = new HashSet<int>();
+                if (same_square_.Where(x => x.Number_ > 0).Any(item => !known_keys.Add(item.Number_))) 
                 {
                     //The square has at least 2 identical numbers somewhere
                     Debug.Log("Duplicate in square");
                 }
                 break;
             case 2:
-                //Highlight ALL error (will need solved sudoku for this
+                //Highlight ALL error (will need solved sudoku for this)
                 break;
         }
     }
