@@ -417,33 +417,53 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 List<GridSquare> same_row_ = new List<GridSquare>();
                 List<GridSquare> same_col_ = new List<GridSquare>();
                 List<GridSquare> same_square_ = new List<GridSquare>();
+                List<GridSquare> error_row_ = new List<GridSquare>();
+                List<GridSquare> error_col_ = new List<GridSquare>();
+                List<GridSquare> error_square_ = new List<GridSquare>();
                 for (int i = 0; i < length; i++)
                 {
+                    //HashSets to check for duplicates
+                    var row_keys = new HashSet<int>();
+                    var col_keys = new HashSet<int>();
+                    var square_keys = new HashSet<int>();
                     //Get all in same row
-                    same_row_.Add(all_squares_[i + row * length]);
+                    //Need to check if null is okay to use here - PICK UP HERE NEXT TIME
+                    same_row_.Add(all_squares_[i + row * length].Number_ > 0 ? all_squares_[i + row * length] : null);
                     //Get all in same col
                     same_col_.Add(all_squares_[i * 9 + col]);
                     //Get all in same nonnet
                     same_square_.Add(all_squares_[(squarestack * root + squareband * root * length) + (i % root) + (length * (i / root))]);
+                    //Checking for duplicates in row, column and square
+                    //Row check
+                    if (!row_keys.Add(same_row_[same_row_.Count - 1].Number_))
+                    {
+                        foreach (GridSquare gridSquare in same_row_.Where(x => x.Number_ == same_row_[same_row_.Count - 1].Number_))
+                        {
+                            error_row_.Add(gridSquare);
+                            same_row_.Remove(gridSquare);
+                        }
+                    }
+                    //Column check
+                    if (!col_keys.Add(same_col_[same_col_.Count - 1].Number_))
+                    {
+                        foreach (GridSquare gridSquare in same_col_.Where(x => x.Number_ == same_col_[same_col_.Count - 1].Number_))
+                        {
+                            error_col_.Add(gridSquare);
+                            same_col_.Remove(gridSquare);
+                        }
+                    }
+                    //Square Check
+                    if (!square_keys.Add(same_square_[same_square_.Count - 1].Number_))
+                    {
+                        foreach (GridSquare gridSquare in same_square_.Where(x => x.Number_ == same_square_[same_square_.Count - 1].Number_))
+                        {
+                            error_square_.Add(gridSquare);
+                            same_square_.Remove(gridSquare);
+                        }
+                    }
                 }
-                var known_keys = new HashSet<int>();
-                if (same_row_.Where(x => x.Number_ > 0).Any(item => !known_keys.Add(item.Number_)))
-                {
-                    //The row has at least 2 identical numbers somewhere
-                    Debug.Log("Duplicate in row");
-                }
-                known_keys = new HashSet<int>();
-                if (same_col_.Where(x => x.Number_ > 0).Any(item => !known_keys.Add(item.Number_)))
-                {
-                    //The column has at least 2 identical numbers somewhere
-                    Debug.Log("Duplicate in column");
-                }
-                known_keys = new HashSet<int>();
-                if (same_square_.Where(x => x.Number_ > 0).Any(item => !known_keys.Add(item.Number_))) 
-                {
-                    //The square has at least 2 identical numbers somewhere
-                    Debug.Log("Duplicate in square");
-                }
+                Debug.Log($"There are {error_row_.Count} duplicates in the row, {error_col_.Count} duplicates in the column, and {error_square_.Count} duplicates in the square");
+               
                 break;
             case 2:
                 //Highlight ALL error (will need solved sudoku for this)
