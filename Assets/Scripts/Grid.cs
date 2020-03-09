@@ -268,6 +268,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 {
                     square.SetNumber(number);
                 }
+                NumberChanged(selected_squares_[selected_squares_.Count - 1]);
             }
             else if (np == NumberPos.Center)
             {
@@ -398,6 +399,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     //Called by gridSquare whenever a number is changed
     public static void NumberChanged(GridSquare gs)
     {
+        int index = all_squares_.IndexOf(gs);
         switch (PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString()))
         {
             default:
@@ -406,10 +408,11 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 break;
             case 1:
                 //Highlight obvious logical errors
-                int row = all_squares_.IndexOf(gs) / length;
-                int col = all_squares_.IndexOf(gs) % length;
+                int row = index / length;
+                int col = index % length;
                 //PICK UP HERE - Formula to get all gridsquares in the same nonnet
-                int square = all_squares_.IndexOf(gs);
+                int squarestack = (index / root) % root;
+                int squareband = index / (length * root);
                 List<GridSquare> same_row_ = new List<GridSquare>();
                 List<GridSquare> same_col_ = new List<GridSquare>();
                 List<GridSquare> same_square_ = new List<GridSquare>();
@@ -419,6 +422,8 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                     same_row_.Add(all_squares_[i + row * length]);
                     //Get all in same col
                     same_col_.Add(all_squares_[i * 9 + col]);
+                    //Get all in same nonnet??????
+                    same_square_.Add(all_squares_[(squareband * root + squarestack * root) + length * (i / root)]);
                 }
                 if (same_row_.Where(x => x.Number_ == gs.Number_).Count() > 0)
                 {
@@ -429,6 +434,11 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 {
                     //The column has at least 2 identical numbers somewhere
                     Debug.Log("Duplicate in column");
+                }
+                if (same_square_.Where(x => x.Number_ == gs.Number_).Count() > 0)
+                {
+                    //The square has at least 2 identical numbers somewhere
+                    Debug.Log("Duplicate in square");
                 }
                 break;
             case 2:
