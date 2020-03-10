@@ -28,21 +28,22 @@ public class Options : MonoBehaviour
     //All playerPrefs keys - be sure to call playerprefs using this enum to avoid spelling errors
     public enum pref_keys
     {
-        c_tile_default,
-        c_tile_highlighted,
-        c_text_given,
-        c_text_input,
-        error_highlighting,
-        level_page_all,
-        level_page_easy,
-        level_page_medium,
-        level_page_hard,
-        selected_difficulty
+        c_tile_default_str,
+        c_tile_highlighted_str,
+        c_text_given_str,
+        c_text_input_str,
+        c_error_str,
+        error_highlighting_int,
+        level_page_all_int,
+        level_page_easy_int,
+        level_page_medium_int,
+        level_page_hard_int,
+        selected_difficulty_int
     }
     // Start is called before the first frame update
     void Start()
     {
-        switch (PlayerPrefs.GetString(pref_keys.c_tile_highlighted.ToString()))
+        switch (PlayerPrefs.GetString(pref_keys.c_tile_highlighted_str.ToString()))
         {
             default:
             case "#EDF50C":
@@ -57,7 +58,7 @@ public class Options : MonoBehaviour
 
         }
        
-        current_error = (error_Highlighting)PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString());
+        current_error = (error_Highlighting)PlayerPrefs.GetInt(pref_keys.error_highlighting_int.ToString());
         error_button.GetComponentInChildren<Text>().text = current_error.ToString();
         color_button01.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Yellow); });
         color_button02.GetComponent<Button>().onClick.AddListener(delegate { ColorButtons(color_Themes.Blue); });
@@ -81,7 +82,7 @@ public class Options : MonoBehaviour
         int j = valueList.IndexOf(current_error) + 1;
         j = valueList.Count == j ? 0 : j;
         current_error = (error_Highlighting)j;
-        PlayerPrefs.SetInt(pref_keys.error_highlighting.ToString(), j);
+        PlayerPrefs.SetInt(pref_keys.error_highlighting_int.ToString(), j);
         error_button.GetComponentInChildren<Text>().text = current_error.ToString();
     }
 
@@ -109,6 +110,7 @@ public class Options : MonoBehaviour
                 break;
 
         }
-        PlayerPrefs.SetString(pref_keys.c_tile_highlighted.ToString(), col);
+        PlayerPrefs.SetString(pref_keys.c_tile_highlighted_str.ToString(), col);
+        PlayerPrefs.SetString(pref_keys.c_error_str.ToString(), "#FF0000");
     }
 }

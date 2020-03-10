@@ -23,6 +23,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     public static List<GridSquare> selected_squares_ = new List<GridSquare>();
     public static List<GridSquare> all_squares_ = new List<GridSquare>();
     private static int sudoku_width;
+    private static List<GridSquare> all_errors_ = new List<GridSquare>();
 
     void Start()
     {
@@ -50,10 +51,11 @@ public class Grid : MonoBehaviour, IPointerDownHandler
         foreach (GridSquare gridSquare in all_squares_)
         {
             gridSquare.ColorTheme(
-                PlayerPrefs.GetString(pref_keys.c_tile_default.ToString()),
-                PlayerPrefs.GetString(pref_keys.c_tile_highlighted.ToString()),
-                PlayerPrefs.GetString(pref_keys.c_text_input.ToString()),
-                PlayerPrefs.GetString(pref_keys.c_text_given.ToString())
+                PlayerPrefs.GetString(pref_keys.c_tile_default_str.ToString()),
+                PlayerPrefs.GetString(pref_keys.c_tile_highlighted_str.ToString()),
+                PlayerPrefs.GetString(pref_keys.c_text_input_str.ToString()),
+                PlayerPrefs.GetString(pref_keys.c_text_given_str.ToString()),
+                PlayerPrefs.GetString(pref_keys.c_error_str.ToString())
                 );
         }
 
@@ -401,77 +403,113 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     public static void NumberChanged(GridSquare gs)
     {
         int index = all_squares_.IndexOf(gs);
-        switch (PlayerPrefs.GetInt(pref_keys.error_highlighting.ToString()))
+        switch (PlayerPrefs.GetInt(pref_keys.error_highlighting_int.ToString()))
         {
             default:
             case 0:
                 //No error highlighting
                 break;
             case 1:
+                if (gs.Number_ == 0)
+                {
+                    gs.SetErrorColor(false);
+                }
                 //Highlight obvious logical errors
+                //Data on the current GridSquare, to find the current row, column and square
                 int row = index / length;
                 int col = index % length;
-                //PICK UP HERE - Formula to get all gridsquares in the same nonnet
                 int squarestack = (index / root) % root;
                 int squareband = index / (length * root);
+
+                //Values needed in the for loop
+
                 List<GridSquare> same_row_ = new List<GridSquare>();
                 List<GridSquare> same_col_ = new List<GridSquare>();
                 List<GridSquare> same_square_ = new List<GridSquare>();
-                List<GridSquare> error_row_ = new List<GridSquare>();
-                List<GridSquare> error_col_ = new List<GridSquare>();
-                List<GridSquare> error_square_ = new List<GridSquare>();
+                List<GridSquare> error_squares_ = new List<GridSquare>();
+                
+                //HashSets to check for duplicates in the loop
+                var row_keys = new HashSet<int>();
+                var col_keys = new HashSet<int>();
+                var square_keys = new HashSet<int>();
+
                 for (int i = 0; i < length; i++)
                 {
-                    //HashSets to check for duplicates
-                    var row_keys = new HashSet<int>();
-                    var col_keys = new HashSet<int>();
-                    var square_keys = new HashSet<int>();
-                    //Get all in same row
-                    same_row_.Add(all_squares_[i + row * length]);
-                    //Get all in same col
-                    same_col_.Add(all_squares_[i * length + col]);
-                    //Get all in same nonnet
-                    same_square_.Add(all_squares_[(squarestack * root + squareband * root * length) + (i % root) + (length * (i / root))]);
+
+
+                    ////Current squares
+                    GridSquare row_square = all_squares_[i + row * length];
+                    GridSquare col_square = all_squares_[i * length + col];
+                    GridSquare square_square = all_squares_[(squarestack * root + squareband * root * length) + (i % root) + (length * (i / root))];
+
+                    same_row_.Add(row_square);
+                    same_col_.Add(col_square);
+                    same_square_.Add(square_square);
                     //Checking for duplicates in row, column and square
                     //Row check
-                    if (!row_keys.Add(same_row_[same_row_.Count - 1].Number_))
+                    if (!row_keys.Add(row_square.Number_))
                     {
-                        if (same_row_[same_row_.Count - 1].Number_ > 0)
+                        if (row_square.Number_ > 0)
                         {
-                            foreach (GridSquare gridSquare in same_row_.Where(x => x.Number_ == same_row_[same_row_.Count - 1].Number_))
+                            foreach (GridSquare gridSquare in same_row_.Where(x => x.Number_ == row_square.Number_))
                             {
-                                error_row_.Add(gridSquare);
-                                same_row_.Remove(gridSquare);
+                                if (!error_squares_.Contains(gridSquare))
+                                {
+                                    error_squares_.Add(gridSquare);
+                                }
                             }
                         }
                     }
                     //Column check
-                    if (!col_keys.Add(same_col_[same_col_.Count - 1].Number_))
+                    if (!col_keys.Add(col_square.Number_))
                     {
-                        if (same_col_[same_col_.Count - 1].Number_ > 0)
+                        if (col_square.Number_ > 0)
                         {
-                            foreach (GridSquare gridSquare in same_col_.Where(x => x.Number_ == same_col_[same_col_.Count - 1].Number_))
+                            foreach (GridSquare gridSquare in same_col_.Where(x => x.Number_ == col_square.Number_))
                             {
-                                error_col_.Add(gridSquare);
-                                same_col_.Remove(gridSquare);
+                                if (!error_squares_.Contains(gridSquare))
+                                {
+                                    error_squares_.Add(gridSquare);
+                                }
                             }
                         }
                     }
                     //Square Check
-                    if (!square_keys.Add(same_square_[same_square_.Count - 1].Number_))
+                    if (!square_keys.Add(square_square.Number_))
                     {
-                        if (same_square_[same_square_.Count - 1].Number_ > 0)
+                        if (square_square.Number_ > 0)
                         {
-                            foreach (GridSquare gridSquare in same_square_.Where(x => x.Number_ == same_square_[same_square_.Count - 1].Number_))
+                            foreach (GridSquare gridSquare in same_square_.Where(x => x.Number_ == square_square.Number_))
                             {
-                                error_square_.Add(gridSquare);
-                                same_square_.Remove(gridSquare);
+                                if (!error_squares_.Contains(gridSquare))
+                                {
+                                    error_squares_.Add(gridSquare);
+                                }
                             }
                         }
                     }
                 }
-                Debug.Log($"There are {error_row_.Count} duplicates in the row, {error_col_.Count} duplicates in the column, and {error_square_.Count} duplicates in the square");
-
+                //Error highlighting
+                if (error_squares_.Count > 0)
+                {
+                    foreach (GridSquare gridSquare in error_squares_)
+                    {
+                        if (!all_errors_.Contains(gridSquare))
+                        {
+                            all_errors_.Add(gridSquare);
+                        }
+                        gridSquare.SetErrorColor(true);
+                        
+                    }
+                }
+                else
+                {
+                    foreach (GridSquare gridSquare in all_errors_)
+                    {
+                        gridSquare.SetErrorColor(false);
+                    }
+                    all_errors_.Clear();
+                }
                 break;
             case 2:
                 //Highlight ALL error (will need solved sudoku for this)

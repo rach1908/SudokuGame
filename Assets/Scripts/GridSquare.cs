@@ -23,6 +23,8 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     private Color SelectedHex;
     //Color of the Text
     private Color TextColor;
+    //Color of the Error highlighting
+    private Color ErrorColor;
     void Start()
     {
 
@@ -69,10 +71,11 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         }
     }
     //Menu change possibly
-    public void ColorTheme(string Default, string Selected, string text, string givens)
+    public void ColorTheme(string Default, string Selected, string text, string givens, string errors)
     {
         ColorUtility.TryParseHtmlString(Default, out DefaultHex);
         ColorUtility.TryParseHtmlString(Selected, out SelectedHex);
+        ColorUtility.TryParseHtmlString(errors, out ErrorColor);
         if (given == false)
         {
             ColorUtility.TryParseHtmlString(text, out TextColor);
@@ -97,7 +100,7 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             number_ = number;
             DisplayText();
         }
-        
+
     }
     public int Number_
     {
@@ -148,12 +151,14 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             DisplayText();
         }
     }
-
+    //This method sets the color of the overlay, used for showing the user which squares are selected
     public void SetColor(string shade)
     {
         switch (shade.ToUpper())
         {
+            default:
             case "DEFAULT":
+                //Note - copies of the colors are created to change the alpha value only in this method
                 Color defaultc = DefaultHex;
                 defaultc.a = 0.0f;
                 OverlayImage.GetComponent<Image>().color = defaultc;
@@ -168,9 +173,23 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
                 Highlightc.a = 0.8f;
                 OverlayImage.GetComponent<Image>().color = Highlightc;
                 break;
-            default:
-                break;
+
         }
+    }
+    //This method is used to change color of the base image, to show the user any errors
+    public void SetErrorColor(bool error)
+    {
+        if (error)
+        {
+            Color errorc = ErrorColor;
+            errorc.a = 0.6f;
+            TileImage.GetComponent<Image>().color = errorc;
+        }
+        else
+        {
+            TileImage.GetComponent<Image>().color = DefaultHex;
+        }
+
     }
 
     //Only called while the grid is generated, the method calling this is responsible for the logic

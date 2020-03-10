@@ -49,24 +49,24 @@ public class LevelSelect : MonoBehaviour
         }
         SpawnSudoku_Levels();
         //Loading difficulty selection from player prefs
-        drop_dif.GetComponent<Dropdown>().value = PlayerPrefs.GetInt(pref_keys.selected_difficulty.ToString());
+        drop_dif.GetComponent<Dropdown>().value = PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString());
         //Default value is 0, so the method must be explicitly called in case the saved value is also 0
-        DropdownChanged(PlayerPrefs.GetInt(pref_keys.selected_difficulty.ToString()));
+        DropdownChanged(PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString()));
         //Loading current page from player prefs
-        switch (PlayerPrefs.GetInt(pref_keys.selected_difficulty.ToString()))
+        switch (PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString()))
         {
             default:
             case 0:
-                current_page = PlayerPrefs.GetInt(pref_keys.level_page_all.ToString());
+                current_page = PlayerPrefs.GetInt(pref_keys.level_page_all_int.ToString());
                 break;
             case 1:
-                current_page = PlayerPrefs.GetInt(pref_keys.level_page_easy.ToString());
+                current_page = PlayerPrefs.GetInt(pref_keys.level_page_easy_int.ToString());
                 break;
             case 2:
-                current_page = PlayerPrefs.GetInt(pref_keys.level_page_medium.ToString());
+                current_page = PlayerPrefs.GetInt(pref_keys.level_page_medium_int.ToString());
                 break;
             case 3:
-                current_page = PlayerPrefs.GetInt(pref_keys.level_page_hard.ToString());
+                current_page = PlayerPrefs.GetInt(pref_keys.level_page_hard_int.ToString());
                 break;
             case 4:
                 Debug.Log("PlayerPrefs has a difficulty selection saved that is not coded");
@@ -192,20 +192,20 @@ public class LevelSelect : MonoBehaviour
             }
         }
        
-        switch (PlayerPrefs.GetInt(pref_keys.selected_difficulty.ToString()))
+        switch (PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString()))
         {
             default:
             case 0:
-                PlayerPrefs.SetInt(pref_keys.level_page_all.ToString(), current_page);
+                PlayerPrefs.SetInt(pref_keys.level_page_all_int.ToString(), current_page);
                 break;
             case 1:
-                PlayerPrefs.SetInt(pref_keys.level_page_easy.ToString(), current_page);
+                PlayerPrefs.SetInt(pref_keys.level_page_easy_int.ToString(), current_page);
                 break;
             case 2:
-                PlayerPrefs.SetInt(pref_keys.level_page_medium.ToString(), current_page);
+                PlayerPrefs.SetInt(pref_keys.level_page_medium_int.ToString(), current_page);
                 break;
             case 3:
-                PlayerPrefs.SetInt(pref_keys.level_page_hard.ToString(), current_page);
+                PlayerPrefs.SetInt(pref_keys.level_page_hard_int.ToString(), current_page);
                 break;
             case 4:
                 Debug.Log("PlayerPrefs has a difficulty selection saved that is not coded");
@@ -226,22 +226,22 @@ public class LevelSelect : MonoBehaviour
                     //Should be unreachable
                     //All difficulties
                     in_use_sudokus_ = sudoku_levels_;
-                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_all.ToString());
+                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_all_int.ToString());
                     break;
                 case 1:
                     //Easy
                     current = Difficulty.Easy;
-                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_easy.ToString());
+                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_easy_int.ToString());
                     break;
                 case 2:
                     //Medium
                     current = Difficulty.Medium;
-                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_medium.ToString());
+                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_medium_int.ToString());
                     break;
                 case 3:
                     //Hard
                     current = Difficulty.Hard;
-                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_hard.ToString());
+                    current_page = PlayerPrefs.GetInt(pref_keys.level_page_hard_int.ToString());
                     break;
                 case 4:
                     //Not implemented
@@ -254,9 +254,9 @@ public class LevelSelect : MonoBehaviour
         else
         {
             in_use_sudokus_ = sudoku_levels_;
-            current_page = PlayerPrefs.GetInt(pref_keys.level_page_all.ToString());
+            current_page = PlayerPrefs.GetInt(pref_keys.level_page_all_int.ToString());
         }
-        PlayerPrefs.SetInt(pref_keys.selected_difficulty.ToString(), i);
+        PlayerPrefs.SetInt(pref_keys.selected_difficulty_int.ToString(), i);
         PositionSudoku_Levels();
     }
 
