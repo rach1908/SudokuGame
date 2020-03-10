@@ -184,10 +184,12 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
             Color errorc = ErrorColor;
             errorc.a = 0.6f;
             TileImage.GetComponent<Image>().color = errorc;
+            number_text.GetComponent<Text>().color = Color.white;
         }
         else
         {
             TileImage.GetComponent<Image>().color = DefaultHex;
+            number_text.GetComponent<Text>().color = TextColor;
         }
 
     }
