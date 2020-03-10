@@ -9,6 +9,7 @@ public class Sudoku
 {
     private Difficulty difficulty;
     public string sudoku_string;
+    public string solution_string = null;
     private bool finished;
     private string player_prog_numbers;
     private string player_prog_corners;

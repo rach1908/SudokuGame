@@ -58,7 +58,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 PlayerPrefs.GetString(pref_keys.c_error_str.ToString())
                 );
         }
-
+        
     }
 
 
@@ -67,6 +67,8 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     {
 
     }
+
+   
 
     private void CreateGrid()
     {
