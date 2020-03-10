@@ -427,43 +427,51 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                     var col_keys = new HashSet<int>();
                     var square_keys = new HashSet<int>();
                     //Get all in same row
-                    //Need to check if null is okay to use here - PICK UP HERE NEXT TIME
-                    same_row_.Add(all_squares_[i + row * length].Number_ > 0 ? all_squares_[i + row * length] : null);
+                    same_row_.Add(all_squares_[i + row * length]);
                     //Get all in same col
-                    same_col_.Add(all_squares_[i * 9 + col]);
+                    same_col_.Add(all_squares_[i * length + col]);
                     //Get all in same nonnet
                     same_square_.Add(all_squares_[(squarestack * root + squareband * root * length) + (i % root) + (length * (i / root))]);
                     //Checking for duplicates in row, column and square
                     //Row check
                     if (!row_keys.Add(same_row_[same_row_.Count - 1].Number_))
                     {
-                        foreach (GridSquare gridSquare in same_row_.Where(x => x.Number_ == same_row_[same_row_.Count - 1].Number_))
+                        if (same_row_[same_row_.Count - 1].Number_ > 0)
                         {
-                            error_row_.Add(gridSquare);
-                            same_row_.Remove(gridSquare);
+                            foreach (GridSquare gridSquare in same_row_.Where(x => x.Number_ == same_row_[same_row_.Count - 1].Number_))
+                            {
+                                error_row_.Add(gridSquare);
+                                same_row_.Remove(gridSquare);
+                            }
                         }
                     }
                     //Column check
                     if (!col_keys.Add(same_col_[same_col_.Count - 1].Number_))
                     {
-                        foreach (GridSquare gridSquare in same_col_.Where(x => x.Number_ == same_col_[same_col_.Count - 1].Number_))
+                        if (same_col_[same_col_.Count - 1].Number_ > 0)
                         {
-                            error_col_.Add(gridSquare);
-                            same_col_.Remove(gridSquare);
+                            foreach (GridSquare gridSquare in same_col_.Where(x => x.Number_ == same_col_[same_col_.Count - 1].Number_))
+                            {
+                                error_col_.Add(gridSquare);
+                                same_col_.Remove(gridSquare);
+                            }
                         }
                     }
                     //Square Check
                     if (!square_keys.Add(same_square_[same_square_.Count - 1].Number_))
                     {
-                        foreach (GridSquare gridSquare in same_square_.Where(x => x.Number_ == same_square_[same_square_.Count - 1].Number_))
+                        if (same_square_[same_square_.Count - 1].Number_ > 0)
                         {
-                            error_square_.Add(gridSquare);
-                            same_square_.Remove(gridSquare);
+                            foreach (GridSquare gridSquare in same_square_.Where(x => x.Number_ == same_square_[same_square_.Count - 1].Number_))
+                            {
+                                error_square_.Add(gridSquare);
+                                same_square_.Remove(gridSquare);
+                            }
                         }
                     }
                 }
                 Debug.Log($"There are {error_row_.Count} duplicates in the row, {error_col_.Count} duplicates in the column, and {error_square_.Count} duplicates in the square");
-               
+
                 break;
             case 2:
                 //Highlight ALL error (will need solved sudoku for this)
