@@ -27,8 +27,8 @@ public class Grid : MonoBehaviour, IPointerDownHandler
 
     void Start()
     {
-        length = int.Parse(Math.Sqrt(double.Parse(DataPassing.sudoku_.sudoku_string.Length.ToString())).ToString());
-        root = int.Parse(Math.Sqrt(double.Parse(length.ToString())).ToString());
+        length = int.Parse(Math.Sqrt(DataPassing.sudoku_.sudoku_string.Length).ToString());
+        root = int.Parse(Math.Sqrt(length).ToString());
         sudoku_width = (117 * root + 4) * root;
         SceneManager.LoadScene("MetaScene", LoadSceneMode.Additive);
         grid_squares_ = new List<GameObject>();

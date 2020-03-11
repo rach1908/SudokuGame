@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,5 +67,57 @@ public class Sudoku
             returner = "Finished";
         }
         return returner;
+    }
+
+    public bool VerifyAnswer(string answer)
+    {
+        //Checks that all the gives are present in the solution
+        for (int i = 0; i < sudoku_string.Length; i++)
+        {
+            if (sudoku_string[i] != '0')
+            {
+                if (sudoku_string[i] != answer[i])
+                {
+                    return false;
+                }
+            }
+        }
+        //The given answer is valid for this sudoku
+        int sudoku_side = int.Parse(Math.Sqrt(answer.Length).ToString());
+        int square_side = int.Parse(Math.Sqrt(sudoku_side).ToString());
+        //The answer is checked to see if it is valid in itself
+        for (int i = 0; i < sudoku_side; i++)
+        {
+            //row check
+            HashSet<char> vs = new HashSet<char>();
+            for (int j = 0; j < sudoku_side; j++)
+            {
+                if (!vs.Add(answer[i * sudoku_side + j]))
+                {
+                    return false;
+                }
+            }
+            //Column check
+            vs = new HashSet<char>();
+            for (int j = 0; j < sudoku_side; j++)
+            {
+                if (!vs.Add(answer[i + j * sudoku_side]))
+                {
+                    return false;
+                }
+            }
+            //Square check
+            vs = new HashSet<char>();
+            for (int j = 0; j < sudoku_side; j++)
+            {
+                if (!vs.Add(answer[(i % square_side) * square_side + ((i / square_side) * square_side * sudoku_side) + j % square_side + sudoku_side * (j / square_side)]))
+                {
+                    return false;
+                }
+            }
+        }
+        //The answer is valid
+        return true;
+
     }
 }

@@ -118,6 +118,11 @@ public class LevelSelect : MonoBehaviour
         SaveLoad.ReMakeSave(suds);
     }
 
+    private void AddSudoku(Sudoku sud)
+    {
+
+    }
+
     private void SpawnSudoku_Levels()
     {
         foreach (Sudoku sudoku in sudokus_)

@@ -49,25 +49,4 @@ public static class SaveLoad
         throw new ArgumentException("There are no sudokus to load!");
     }
 
-    //WORKING
-    //public static void TestSave(string test)
-    //{
-    //    BinaryFormatter bf = new BinaryFormatter();
-    //    FileStream file = File.Create("./Test.lel");
-    //    bf.Serialize(file, test);
-    //    file.Close();
-    //}
-
-    //public static string TestLoad()
-    //{
-    //    string returner = "";
-    //    if (File.Exists("./Test.lel"))
-    //    {
-    //        BinaryFormatter bf = new BinaryFormatter();
-    //        FileStream file = File.Open("./Test.lel", FileMode.Open);
-    //        returner = (string)bf.Deserialize(file);
-    //        file.Close();
-    //    }
-    //    return returner;
-    //}
 }
