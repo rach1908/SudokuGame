@@ -49,4 +49,25 @@ public static class SaveLoad
         throw new ArgumentException("There are no sudokus to load!");
     }
 
+    public static void SaveSeeds(List<Sudoku> seeds)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "seeds.lvl", FileMode.OpenOrCreate);
+        bf.Serialize(file, seeds);
+        file.Close();
+    }
+
+    public static List<Sudoku> LoadSeeds()
+    {
+        if (File.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "seeds.lvl"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + Path.DirectorySeparatorChar + "seeds.lvl", FileMode.Open);
+            List<Sudoku> seeds = (List<Sudoku>)bf.Deserialize(file);
+            file.Close();
+            return seeds;
+        }
+        throw new ArgumentException("There are no seeds to load");
+    }
+
 }

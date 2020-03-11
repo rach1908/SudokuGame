@@ -15,6 +15,7 @@ public class LevelSelect : MonoBehaviour
     public GameObject btn_prev;
     public GameObject drop_dif;
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
+    public static System.Random rnd = new System.Random();
     private int entries_per_line;
     //starts at 0
     private int current_page;
@@ -24,6 +25,7 @@ public class LevelSelect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //RecreateSudokuFile();
         drop_dif.GetComponent<Dropdown>().onValueChanged.AddListener(delegate { DropdownChanged(drop_dif.GetComponent<Dropdown>().value); });
         //Adding text to the dropdown
