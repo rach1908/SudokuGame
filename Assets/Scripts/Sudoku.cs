@@ -10,7 +10,7 @@ public class Sudoku
 {
     private Difficulty difficulty;
     public string sudoku_string;
-    public string solution_string = null;
+    public string solution_string;
     private bool finished;
     private string player_prog_numbers;
     private string player_prog_corners;
@@ -78,6 +78,7 @@ public class Sudoku
             {
                 if (sudoku_string[i] != answer[i])
                 {
+                    Debug.Log("The solution and the sudoku string gives conflict");
                     return false;
                 }
             }
@@ -92,8 +93,9 @@ public class Sudoku
             HashSet<char> vs = new HashSet<char>();
             for (int j = 0; j < sudoku_side; j++)
             {
-                if (!vs.Add(answer[i * sudoku_side + j]))
+                if (!vs.Add(answer[(i * sudoku_side) + j]))
                 {
+                    Debug.Log("The row flags false");
                     return false;
                 }
             }
@@ -103,6 +105,7 @@ public class Sudoku
             {
                 if (!vs.Add(answer[i + j * sudoku_side]))
                 {
+                    Debug.Log("The column flags false");
                     return false;
                 }
             }
@@ -112,6 +115,7 @@ public class Sudoku
             {
                 if (!vs.Add(answer[(i % square_side) * square_side + ((i / square_side) * square_side * sudoku_side) + j % square_side + sudoku_side * (j / square_side)]))
                 {
+                    Debug.Log("The square flags false");
                     return false;
                 }
             }

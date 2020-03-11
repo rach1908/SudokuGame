@@ -31,7 +31,7 @@ public class LevelSelect : MonoBehaviour
         //Adding text to the dropdown
         drop_dif.GetComponent<Dropdown>().options.Clear();
         drop_dif.GetComponent<Dropdown>().options.Add(new Dropdown.OptionData() { text = "All Difficulties" });
-        foreach (Difficulty difficulty in (Difficulty[]) Enum.GetValues(typeof(Difficulty)))
+        foreach (Difficulty difficulty in (Difficulty[])Enum.GetValues(typeof(Difficulty)))
         {
             drop_dif.GetComponent<Dropdown>().options.Add(new Dropdown.OptionData() { text = difficulty.ToString() });
         }
@@ -40,6 +40,7 @@ public class LevelSelect : MonoBehaviour
         if (DataPassing.sudoku_ != null)
         {
             SaveLoad.Save(DataPassing.sudoku_);
+            Debug.Log(DataPassing.sudoku_.VerifyAnswer("269541873473892165581376924812639547694715238357428691135267489946183752728954316"));
         }
         try
         {
@@ -120,10 +121,7 @@ public class LevelSelect : MonoBehaviour
         SaveLoad.ReMakeSave(suds);
     }
 
-    private void AddSudoku(Sudoku sud)
-    {
-
-    }
+    
 
     private void SpawnSudoku_Levels()
     {

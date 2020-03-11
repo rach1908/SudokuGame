@@ -24,7 +24,7 @@ public static class SudokuGenerator
         //Generate a sudoku from the seed
         return seed;
     }
-
+    //Takes a Sudoku with a valid answer as parameter
     static public Sudoku GenerateSeed(Sudoku sudoku)
     {
         //Verify that the sudoku is solved correctly, so the seed can include a correct answer
