@@ -50,7 +50,7 @@ public static class SudokuGenerator
             replacement_solution += placeholders.TryGetValue(sudoku.sudoku_string[i], out char value);
         }
         //Solution must be added to this ctor call once the ctor is updated!
-        Sudoku returner = new Sudoku(replacement_string, sudoku.dif);
+        Sudoku returner = new Sudoku(replacement_string, replacement_solution, sudoku.dif);
         return returner;
     }
 }
