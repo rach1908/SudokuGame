@@ -20,7 +20,7 @@ public class GameScript : MonoBehaviour
 
     private void OnGUI()
     {
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
             if (Grid.selected_squares_.Count > 0)
             {

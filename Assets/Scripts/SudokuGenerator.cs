@@ -32,7 +32,6 @@ public static class SudokuGenerator
         {
             throw new ArgumentException("The sudoku does not have a correct solution, so it cannot be made into a seed");
         }
-        string seed_string = sudoku.sudoku_string;
         Dictionary<int, char> placeholders = new Dictionary<int, char>();
         //This should create a list of the first n letters of the alphabet, using the sudokus side length as n
         List<char> letters = Enumerable.Range('a', int.Parse(Math.Sqrt(sudoku.sudoku_string.Length).ToString())).Select(x => (char)x).ToList();
@@ -50,9 +49,8 @@ public static class SudokuGenerator
             replacement_string += sudoku.sudoku_string[i] != '0' ? char.Parse(placeholders.TryGetValue(sudoku.sudoku_string[i], out char character).ToString()) : '0';
             replacement_solution += placeholders.TryGetValue(sudoku.sudoku_string[i], out char value);
         }
-
+        //Solution must be added to this ctor call once the ctor is updated!
         Sudoku returner = new Sudoku(replacement_string, sudoku.dif);
-        returner.solution_string = replacement_solution;
         return returner;
     }
 }

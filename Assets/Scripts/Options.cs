@@ -112,5 +112,6 @@ public class Options : MonoBehaviour
         }
         PlayerPrefs.SetString(pref_keys.c_tile_highlighted_str.ToString(), col);
         PlayerPrefs.SetString(pref_keys.c_error_str.ToString(), "#FF0000");
+        PlayerPrefs.SetString(pref_keys.c_tile_default_str.ToString(), "#f2f2f2");
     }
 }

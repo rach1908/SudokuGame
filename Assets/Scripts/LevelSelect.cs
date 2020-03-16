@@ -103,7 +103,8 @@ public class LevelSelect : MonoBehaviour
 
     private void RecreateSudokuFile()
     {
-        ////Base Levels
+        //Base Levels
+        //must be solved before they can be added
         List<Sudoku> suds = new List<Sudoku>() {
             new Sudoku("060501800473002005501000024810600000090000030357020601005207480946100750008900010", LevelSelect.Difficulty.Easy),
             new Sudoku("000409802570380004000002500328017060057930000900020730780100000605208007094073050", LevelSelect.Difficulty.Easy),

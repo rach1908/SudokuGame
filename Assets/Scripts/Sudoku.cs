@@ -48,6 +48,8 @@ public class Sudoku
     public Sudoku(string Sud_string, Difficulty dif)
     {
         difficulty = dif;
+        //not until after the answers are done
+        //solution_string = sol_string;
         sudoku_string = Sud_string;
     }
     
