@@ -15,6 +15,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     public static int length = 0;
     public GameObject grid_square;
     public GameObject btn_Menu;
+    public GameObject btn_Check;
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
     private float square_scale = 1.0f;
     public float buffer = 0.85f;
@@ -46,6 +47,9 @@ public class Grid : MonoBehaviour, IPointerDownHandler
         //Return to menu button setup
         btn_Menu.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width - (btn_Menu.GetComponent<RectTransform>().rect.width / 2 + 25), Screen.height - (btn_Menu.GetComponent<RectTransform>().rect.height / 2 + 25));
         btn_Menu.GetComponent<Button>().onClick.AddListener(ReturnToMenu);
+        //check solution button setup
+        btn_Check.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width - (btn_Check.GetComponent<RectTransform>().rect.width / 2 + 25), btn_Check.GetComponent<RectTransform>().rect.height / 2 + 25);
+        btn_Check.GetComponent<Button>().onClick.AddListener(CheckAnswer);
         //This will recieve data from the Sudoku.current object
         FillGrid(DataPassing.sudoku_.sudoku_string, DataPassing.sudoku_.Player_prog_numbers, DataPassing.sudoku_.Player_prog_corners, DataPassing.sudoku_.Player_prog_centers);
         foreach (GridSquare gridSquare in all_squares_)
@@ -92,6 +96,19 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     {
         CompilePlayer_prog();
         SceneManager.LoadScene("MenuScene");
+    }
+
+    private void CheckAnswer()
+    {
+        Debug.Log("The Check button was clicked. It currently does nothing");
+        //for (int i = 0; i < all_squares_.Count; i++)
+        //{
+        //    if (all_squares_[i].Number_ == 0 || all_squares_[i].Number_ != int.Parse(DataPassing.sudoku_.solution_string[i].ToString()))
+        //    {
+                
+        //    }
+        //}
+
     }
     private void SpawnGridSquares()
     {
