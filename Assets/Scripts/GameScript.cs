@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour
 {
+    
    
     // Start is called before the first frame update
     void Start()
@@ -15,7 +16,7 @@ public class GameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnGUI()
@@ -39,7 +40,7 @@ public class GameScript : MonoBehaviour
         {
             KeyboardController(e);
         }
-        
+       
 
     }
     private void KeyboardController(Event ev)
@@ -58,7 +59,7 @@ public class GameScript : MonoBehaviour
         {
             case KeyCode.None:
                 break;
-                //All 'delete' cases
+            //All 'delete' cases
             case KeyCode.Backspace:
             case KeyCode.Delete:
             case KeyCode.Keypad0:
@@ -73,7 +74,7 @@ public class GameScript : MonoBehaviour
                 break;
             case KeyCode.Space:
                 break;
-                //All directional cases
+            //All directional cases
             case KeyCode.UpArrow:
             case KeyCode.W:
             case KeyCode.DownArrow:
@@ -85,7 +86,7 @@ public class GameScript : MonoBehaviour
                 //Call to static Grid.cs method to add an adjacent square to the selection list
                 Grid.SelectAdjacent(ev);
                 break;
-                //All cases from 1-9
+            //All cases from 1-9
             case KeyCode.Keypad1:
             case KeyCode.Alpha1:
             case KeyCode.Keypad2:
@@ -105,9 +106,10 @@ public class GameScript : MonoBehaviour
             case KeyCode.Keypad9:
             case KeyCode.Alpha9:
                 //Don't look
-                Grid.SetGridNumber(int.Parse(kc.ToString()[kc.ToString().Length -1].ToString()), np);
+                Grid.SetGridNumber(int.Parse(kc.ToString()[kc.ToString().Length - 1].ToString()), np);
                 break;
             case KeyCode.B:
+                Debug.Log("bbb");
                 break;
             case KeyCode.C:
                 break;
@@ -168,10 +170,11 @@ public class GameScript : MonoBehaviour
             //Do stuff
             case KeyCode.Mouse0:
                 //clicky
-                Event e = Event.current;
+                Debug.Log("mouse0");
 
                 break;
             case KeyCode.Mouse1:
+                Debug.Log("Mouse1");
                 break;
             case KeyCode.Mouse2:
                 break;

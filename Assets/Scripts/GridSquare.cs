@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
+public class GridSquare : MonoBehaviour
 {
     public GameObject number_text;
     public GameObject TileImage;
@@ -27,7 +27,6 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
     private Color ErrorColor;
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -218,23 +217,23 @@ public class GridSquare : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
         img.transform.rotation = Quaternion.AngleAxis(90 * rotations, Vector3.back);
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-        {
-            Grid.SelectSquare(this);
-        }
-        else
-        {
-            Grid.ReSelectSquare(this);
-        }
-    }
+    //public void OnPointerDown(PointerEventData eventData)
+    //{
+    //    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+    //    {
+    //        Grid.SelectSquare(this);
+    //    }
+    //    else
+    //    {
+    //        Grid.ReSelectSquare(this);
+    //    }
+    //}
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (Input.GetKey(KeyCode.Mouse0))
-        {
-            Grid.SelectSquare(this);
-        }
-    }
+    //public void OnPointerEnter(PointerEventData eventData)
+    //{
+    //    if (Input.GetKey(KeyCode.Mouse0))
+    //    {
+    //        Grid.SelectSquare(this);
+    //    }
+    //}
 }

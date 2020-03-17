@@ -9,8 +9,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Options;
 
-public class Grid : MonoBehaviour, IPointerDownHandler
+public class Grid : MonoBehaviour
 {
+    //raycasting setup
+    GraphicRaycaster raycaster;
     //Determines the side lenght of the sudoku. Length must be a squared number, will be set ingame, drop down menu possibly (anything above 8^2 seems to slow down the game considerably, 13^2 almost made unity crash). Must be at least 4
     public static int length = 0;
     public GameObject grid_square;
@@ -25,6 +27,11 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     public static List<GridSquare> all_squares_ = new List<GridSquare>();
     private static int sudoku_width;
     private static List<GridSquare> all_errors_ = new List<GridSquare>();
+
+    private void Awake()
+    {
+        this.raycaster = GetComponent<GraphicRaycaster>();
+    }
 
     void Start()
     {
@@ -62,17 +69,45 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 PlayerPrefs.GetString(pref_keys.c_error_str.ToString())
                 );
         }
-        
+
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            PointerEventData pointerData = new PointerEventData(EventSystem.current);
+            List<RaycastResult> results = new List<RaycastResult>();
 
+            pointerData.position = Input.mousePosition;
+            this.raycaster.Raycast(pointerData, results);
+
+            if (results.Count == 0)
+            {
+                ClearSelected();
+            }
+            else
+            {
+                if (results[0].gameObject.GetComponentInParent<GridSquare>() != null)
+                {
+                    //A gridsquare was clicked
+                    if (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl))
+                    {
+                        SelectSquare(results[0].gameObject.GetComponentInParent<GridSquare>());
+                    }
+                    else
+                    {
+                        ReSelectSquare(results[0].gameObject.GetComponentInParent<GridSquare>());
+                    }
+                }
+            }
+        }
+        
     }
 
-   
+
 
     private void CreateGrid()
     {
@@ -105,7 +140,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
         //{
         //    if (all_squares_[i].Number_ == 0 || all_squares_[i].Number_ != int.Parse(DataPassing.sudoku_.solution_string[i].ToString()))
         //    {
-                
+
         //    }
         //}
 
@@ -339,9 +374,12 @@ public class Grid : MonoBehaviour, IPointerDownHandler
     }
 
     //Called when a click is registrered outside of the grid
-    //Not in use as of now
     public static void ClearSelected()
     {
+        foreach (GridSquare gs in selected_squares_)
+        {
+            gs.SetColor("DEFAULT");
+        }
         selected_squares_ = new List<GridSquare>();
     }
 
@@ -446,7 +484,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                 List<GridSquare> same_col_ = new List<GridSquare>();
                 List<GridSquare> same_square_ = new List<GridSquare>();
                 List<GridSquare> error_squares_ = new List<GridSquare>();
-                
+
                 //HashSets to check for duplicates in the loop
                 var row_keys = new HashSet<int>();
                 var col_keys = new HashSet<int>();
@@ -518,7 +556,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler
                             all_errors_.Add(gridSquare);
                         }
                         gridSquare.SetErrorColor(true);
-                        
+
                     }
                 }
                 else
@@ -576,8 +614,5 @@ public class Grid : MonoBehaviour, IPointerDownHandler
 
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("I just clicked" + eventData.selectedObject.name);
-    }
+    
 }
