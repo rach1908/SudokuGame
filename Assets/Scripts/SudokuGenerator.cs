@@ -27,11 +27,7 @@ public static class SudokuGenerator
     //Takes a Sudoku with a valid answer as parameter
     static public Sudoku GenerateSeed(Sudoku sudoku)
     {
-        //Verify that the sudoku is solved correctly, so the seed can include a correct answer
-        if (!sudoku.VerifyAnswer(sudoku.solution_string))
-        {
-            throw new ArgumentException("The sudoku does not have a correct solution, so it cannot be made into a seed");
-        }
+      
         Dictionary<int, char> placeholders = new Dictionary<int, char>();
         //This should create a list of the first n letters of the alphabet, using the sudokus side length as n
         List<char> letters = Enumerable.Range('a', int.Parse(Math.Sqrt(sudoku.sudoku_string.Length).ToString())).Select(x => (char)x).ToList();

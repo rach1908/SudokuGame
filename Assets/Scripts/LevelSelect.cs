@@ -39,8 +39,9 @@ public class LevelSelect : MonoBehaviour
         btn_prev.GetComponent<Button>().onClick.AddListener(delegate { ChangePage(false); });
         if (DataPassing.sudoku_ != null)
         {
+            //This state is reached when returning to the menu from a sudoku
             SaveLoad.Save(DataPassing.sudoku_);
-            Debug.Log(DataPassing.sudoku_.VerifyAnswer("269541873473892165581376924812639547694715238357428691135267489946183752728954316"));
+            DataPassing.sudoku_.VerifyAnswer();
         }
         try
         {
@@ -49,6 +50,15 @@ public class LevelSelect : MonoBehaviour
         catch (System.ArgumentException e)
         {
             Debug.Log(e.Message);
+        }
+        if (DataPassing.sudoku_ != null)
+        {
+            //This state is reached when returning to the menu from a sudoku
+            SaveLoad.Save(DataPassing.sudoku_);
+            if (DataPassing.sudoku_.VerifyAnswer())
+            {
+
+            }
         }
         SpawnSudoku_Levels();
         //Loading difficulty selection from player prefs
@@ -76,7 +86,7 @@ public class LevelSelect : MonoBehaviour
                 break;
         }
         entries_per_line = 3;
-        if (current_page == 0 )
+        if (current_page == 0)
         {
             btn_prev.GetComponent<Button>().interactable = false;
         }
@@ -86,16 +96,18 @@ public class LevelSelect : MonoBehaviour
         }
         //Creating and positioning the appropriate levels
         PositionSudoku_Levels();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
-    public enum Difficulty{
+    public enum Difficulty
+    {
         Easy,
         Medium,
         Hard
@@ -169,16 +181,36 @@ public class LevelSelect : MonoBehaviour
         SaveLoad.ReMakeSave(suds);
     }
 
-    
+
 
     private void SpawnSudoku_Levels()
     {
+        //counters to numerate the levels seperatly for each difficulty
+        //remember to add an option for each new difficulty
+        int easy_counter = 0;
+        int med_counter = 0;
+        int hard_counter = 0;
         foreach (Sudoku sudoku in sudokus_)
         {
             sudoku_levels_.Add(Instantiate(sudoku_level) as GameObject);
             GameObject sudlvl = sudoku_levels_[sudoku_levels_.Count - 1];
             sudlvl.GetComponent<Level>().sudoku_level = sudoku;
-            sudlvl.GetComponent<Level>().CreateText(sudoku_levels_.Count);
+            switch (sudoku.dif)
+            {
+                default:
+                case Difficulty.Easy:
+                    easy_counter++;
+                    sudlvl.GetComponent<Level>().CreateText(easy_counter);
+                    break;
+                case Difficulty.Medium:
+                    med_counter++;
+                    sudlvl.GetComponent<Level>().CreateText(med_counter);
+                    break;
+                case Difficulty.Hard:
+                    hard_counter++;
+                    sudlvl.GetComponent<Level>().CreateText(hard_counter);
+                    break;
+            }
             sudlvl.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectLevel(sudlvl.GetComponent<Level>()); });
             sudlvl.transform.SetParent(this.transform, false);
             sudlvl.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
@@ -223,8 +255,8 @@ public class LevelSelect : MonoBehaviour
         for (int i = 0; i < current_sudokus_.Count; i++)
         {
             current_sudokus_[i].transform.localScale = new Vector3(1, 1, 1);
-            current_sudokus_[i].GetComponent<RectTransform>().position = 
-                new Vector3(start_position.x + offset.x * ((i % entries_per_line) + 1) , start_position.y  - offset.y * ((i / entries_per_line) + 1));
+            current_sudokus_[i].GetComponent<RectTransform>().position =
+                new Vector3(start_position.x + offset.x * ((i % entries_per_line) + 1), start_position.y - offset.y * ((i / entries_per_line) + 1));
         }
     }
 
@@ -244,7 +276,7 @@ public class LevelSelect : MonoBehaviour
                 current_page -= 1;
             }
         }
-       
+
         switch (PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString()))
         {
             default:

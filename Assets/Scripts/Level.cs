@@ -18,4 +18,9 @@ public class Level : MonoBehaviour
         Text.GetComponent<Text>().text = sudoku_level.GenerateText();
         Button.GetComponentInChildren<Text>().text = sudoku_level.dif.ToString() + " " + i.ToString();
     }
+
+    public void UpdateProgress()
+    {
+        Text.GetComponent<Text>().text = sudoku_level.GenerateText();
+    }
 }

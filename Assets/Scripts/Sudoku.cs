@@ -51,7 +51,7 @@ public class Sudoku
         solution_string = sol_string;
         sudoku_string = Sud_string;
     }
-    
+
     public string GenerateText()
     {
         string returner = "";
@@ -65,64 +65,27 @@ public class Sudoku
         }
         else
         {
-            returner = "Finished";
+            returner = "Completed";
         }
         return returner;
     }
 
-    public bool VerifyAnswer(string answer)
+    public bool VerifyAnswer()
     {
-        //Checks that all the gives are present in the solution
-        for (int i = 0; i < sudoku_string.Length; i++)
+        string res_no_givens = "";
+        for (int i = 0; i < DataPassing.sudoku_.sudoku_string.Length; i++)
         {
-            if (sudoku_string[i] != '0')
+            if (DataPassing.sudoku_.sudoku_string[i] == '0')
             {
-                if (sudoku_string[i] != answer[i])
-                {
-                    Debug.Log("The solution and the sudoku string gives conflict");
-                    return false;
-                }
+                res_no_givens += solution_string[i];
             }
         }
-        //The given answer is valid for this sudoku
-        int sudoku_side = int.Parse(Math.Sqrt(answer.Length).ToString());
-        int square_side = int.Parse(Math.Sqrt(sudoku_side).ToString());
-        //The answer is checked to see if it is valid in itself
-        for (int i = 0; i < sudoku_side; i++)
+        if (res_no_givens == player_prog_numbers)
         {
-            //row check
-            HashSet<char> vs = new HashSet<char>();
-            for (int j = 0; j < sudoku_side; j++)
-            {
-                if (!vs.Add(answer[(i * sudoku_side) + j]))
-                {
-                    Debug.Log("The row flags false");
-                    return false;
-                }
-            }
-            //Column check
-            vs = new HashSet<char>();
-            for (int j = 0; j < sudoku_side; j++)
-            {
-                if (!vs.Add(answer[i + j * sudoku_side]))
-                {
-                    Debug.Log("The column flags false");
-                    return false;
-                }
-            }
-            //Square check
-            vs = new HashSet<char>();
-            for (int j = 0; j < sudoku_side; j++)
-            {
-                if (!vs.Add(answer[(i % square_side) * square_side + ((i / square_side) * square_side * sudoku_side) + j % square_side + sudoku_side * (j / square_side)]))
-                {
-                    Debug.Log("The square flags false");
-                    return false;
-                }
-            }
+            finished = true;
+            return true;
         }
-        //The answer is valid
-        return true;
 
+        return false;
     }
 }
