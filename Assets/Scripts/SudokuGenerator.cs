@@ -5,12 +5,23 @@ using System.Linq;
 using UnityEngine;
 using static LevelSelect;
 
-public static class SudokuGenerator 
+public class SudokuGenerator: MonoBehaviour
 {
     static List<Sudoku> seeds = new List<Sudoku>();
-    // Start is called before the first frame update
     
-    
+    static public void GeneratorStart()
+    {
+        Debug.Log("Start");
+        try
+        {
+            seeds = SaveLoad.LoadSeeds();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+    }
+
     static public Sudoku GenerateSudoku(Difficulty dif)
     {
         //Selecting a random seed of the given difficulty

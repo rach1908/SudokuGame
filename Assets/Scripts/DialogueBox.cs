@@ -19,8 +19,5 @@ public class DialogueBox : MonoBehaviour
         
     }
 
-    public DialogueBox(string message)
-    {
-        Display_text.GetComponent<Text>().text = message;
-    }
+    
 }

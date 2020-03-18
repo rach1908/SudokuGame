@@ -60,10 +60,12 @@ public class LevelSelect : MonoBehaviour
 
             }
         }
+        //Calling to the SudokuGenerator to load in the list of seeds, in preperation for generating new levels
+        SudokuGenerator.GeneratorStart();
         SpawnSudoku_Levels();
         //Loading difficulty selection from player prefs
         drop_dif.GetComponent<Dropdown>().value = PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString());
-        //Default value is 0, so the method must be explicitly called in case the saved value is also 0
+        //Default value is 0, so the dropdownchanged method must be explicitly called in case the saved value is also 0
         DropdownChanged(PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString()));
         //Loading current page from player prefs
         switch (PlayerPrefs.GetInt(pref_keys.selected_difficulty_int.ToString()))
@@ -85,6 +87,7 @@ public class LevelSelect : MonoBehaviour
                 Debug.Log("PlayerPrefs has a difficulty selection saved that is not coded");
                 break;
         }
+        //could be made into an option in the future, for now it is hard coded
         entries_per_line = 3;
         if (current_page == 0)
         {
