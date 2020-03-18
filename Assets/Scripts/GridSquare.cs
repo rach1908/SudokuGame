@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class GridSquare : MonoBehaviour
+public class GridSquare : MonoBehaviour, IPointerEnterHandler
 {
     public GameObject number_text;
     public GameObject TileImage;
@@ -217,6 +217,8 @@ public class GridSquare : MonoBehaviour
         img.transform.rotation = Quaternion.AngleAxis(90 * rotations, Vector3.back);
     }
 
+
+
     //public void OnPointerDown(PointerEventData eventData)
     //{
     //    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
@@ -229,11 +231,11 @@ public class GridSquare : MonoBehaviour
     //    }
     //}
 
-    //public void OnPointerEnter(PointerEventData eventData)
-    //{
-    //    if (Input.GetKey(KeyCode.Mouse0))
-    //    {
-    //        Grid.SelectSquare(this);
-    //    }
-    //}
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            Grid.SelectSquare(this);
+        }
+    }
 }

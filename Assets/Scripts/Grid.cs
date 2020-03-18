@@ -104,7 +104,7 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
 
@@ -136,6 +136,8 @@ public class Grid : MonoBehaviour
     private void CheckAnswer()
     {
         Debug.Log("The Check button was clicked. It currently does nothing");
+        //Instantiate new DialogBox
+        //Pass text to it based on result of answer
         //for (int i = 0; i < all_squares_.Count; i++)
         //{
         //    if (all_squares_[i].Number_ == 0 || all_squares_[i].Number_ != int.Parse(DataPassing.sudoku_.solution_string[i].ToString()))
@@ -347,7 +349,10 @@ public class Grid : MonoBehaviour
     //Called when a selection is added to current list of selections
     public static void SelectSquare(GridSquare g)
     {
-        selected_squares_[selected_squares_.Count - 1].SetColor("SELECTED");
+        if (selected_squares_.Count != 0)
+        {
+            selected_squares_[selected_squares_.Count - 1].SetColor("SELECTED");
+        }
         if (selected_squares_.Contains(g))
         {
             selected_squares_.Remove(g);
@@ -614,5 +619,5 @@ public class Grid : MonoBehaviour
 
     }
 
-    
+
 }
