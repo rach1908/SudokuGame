@@ -18,6 +18,8 @@ public class Grid : MonoBehaviour
     public GameObject grid_square;
     public GameObject btn_Menu;
     public GameObject btn_Check;
+    public GameObject dialogue_box;
+    private GameObject obj;
     public Vector2 start_position = new Vector2(0.0f, 0.0f);
     private float square_scale = 1.0f;
     public float buffer = 0.85f;
@@ -90,7 +92,11 @@ public class Grid : MonoBehaviour
             }
             else
             {
-                if (results[0].gameObject.GetComponentInParent<GridSquare>() != null)
+                if (results[0].gameObject.GetComponentInParent<DialogueBox>() != null)
+                {
+                    Destroy(obj);
+                }
+                else if (results[0].gameObject.GetComponentInParent<GridSquare>() != null)
                 {
                     //A gridsquare was clicked
                     if (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl))
@@ -102,6 +108,7 @@ public class Grid : MonoBehaviour
                         ReSelectSquare(results[0].gameObject.GetComponentInParent<GridSquare>());
                     }
                 }
+               
             }
         }
 
@@ -135,17 +142,30 @@ public class Grid : MonoBehaviour
 
     private void CheckAnswer()
     {
-        Debug.Log("The Check button was clicked. It currently does nothing");
+        string message = "";
         //Instantiate new DialogBox
         //Pass text to it based on result of answer
-        //for (int i = 0; i < all_squares_.Count; i++)
-        //{
-        //    if (all_squares_[i].Number_ == 0 || all_squares_[i].Number_ != int.Parse(DataPassing.sudoku_.solution_string[i].ToString()))
-        //    {
-
-        //    }
-        //}
-
+        if (all_squares_.Any(x => x.Number_ == 0))
+        {
+            //The sudoku has not been filled out
+            message = "The sudoku has not been filled out, please finish it before the answer can be checked. If you want to check for errors during your solve, try changing the error highlighting option in the options menu.";
+        }
+        else
+        {
+            CompilePlayer_prog();
+            if (DataPassing.sudoku_.VerifyAnswer())
+            {
+                //The answer is correct
+                message = "The sudoku has been solved correctly! Good job!";
+            }
+            else
+            {
+                message = "Your solution has errors in it. If you want to check for errors during your solve, try changing the error highlighting option in the options menu.";
+            }
+        }
+        obj = Instantiate(dialogue_box) as GameObject;
+        obj.transform.SetParent(this.transform, false);
+        obj.GetComponent<DialogueBox>().Display_text.GetComponent<Text>().text = message;
     }
     private void SpawnGridSquares()
     {

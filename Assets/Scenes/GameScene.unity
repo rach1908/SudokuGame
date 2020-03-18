@@ -688,6 +688,8 @@ MonoBehaviour:
     type: 3}
   btn_Menu: {fileID: 608913446}
   btn_Check: {fileID: 1798672972}
+  dialogue_box: {fileID: 4172969151476144871, guid: d8abfd8443b5c834fb7832c70bddc75b,
+    type: 3}
   start_position: {x: 0, y: 0}
   buffer: 0.85
 --- !u!1 &1798672972
