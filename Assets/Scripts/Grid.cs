@@ -165,6 +165,10 @@ public class Grid : MonoBehaviour
         }
         obj = Instantiate(dialogue_box) as GameObject;
         obj.transform.SetParent(this.transform, false);
+        Vector3 size = new Vector3(Screen.width / 2, Screen.height / 2);
+
+        obj.GetComponentInChildren<Text>().GetComponentInParent<Image>().GetComponent<RectTransform>().sizeDelta = size;
+        obj.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = size;
         obj.GetComponent<DialogueBox>().Display_text.GetComponent<Text>().text = message;
     }
     private void SpawnGridSquares()
