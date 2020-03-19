@@ -11,7 +11,6 @@ public class SudokuGenerator: MonoBehaviour
     
     static public void GeneratorStart()
     {
-        Debug.Log("Start");
         try
         {
             seeds = SaveLoad.LoadSeeds();
@@ -42,22 +41,20 @@ public class SudokuGenerator: MonoBehaviour
         Dictionary<int, char> placeholders = new Dictionary<int, char>();
         //This should create a list of the first n letters of the alphabet, using the sudokus side length as n
         List<char> letters = Enumerable.Range('a', int.Parse(Math.Sqrt(sudoku.sudoku_string.Length).ToString())).Select(x => (char)x).ToList();
+        
         for (int i = 0; i < Math.Sqrt(sudoku.sudoku_string.Length); i++)
         {
-            char insert = letters[rnd.Next(0, letters.Count)];
-            letters.Remove(insert);
-            placeholders.Add(i + 1, insert);
+            placeholders.Add(i + 1, letters[i]);
         }
         //Iterating through each letter of the sudoku and answer strings to convert them to the corresponding characters;
         string replacement_string = "";
         string replacement_solution = "";
         for (int i = 0; i < sudoku.sudoku_string.Length; i++)
-        {
-            replacement_string += sudoku.sudoku_string[i] != '0' ? char.Parse(placeholders.TryGetValue(sudoku.sudoku_string[i], out char character).ToString()) : '0';
-            replacement_solution += placeholders.TryGetValue(sudoku.sudoku_string[i], out char value);
+        {             
+            replacement_string += sudoku.sudoku_string[i] != '0' ? placeholders[int.Parse(sudoku.sudoku_string[i].ToString())] : '0';
+            replacement_solution += placeholders.TryGetValue(int.Parse(sudoku.solution_string[i].ToString()), out char value) ? value : throw new ArgumentException("The seed cannot be made as the solution contains disallowed characters");
         }
         //Solution must be added to this ctor call once the ctor is updated!
-        Sudoku returner = new Sudoku(replacement_string, replacement_solution, sudoku.dif);
-        return returner;
+        return new Sudoku(replacement_string, replacement_solution, sudoku.dif);
     }
 }

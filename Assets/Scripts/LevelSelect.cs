@@ -51,16 +51,8 @@ public class LevelSelect : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
-        if (DataPassing.sudoku_ != null)
-        {
-            //This state is reached when returning to the menu from a sudoku
-            SaveLoad.Save(DataPassing.sudoku_);
-            if (DataPassing.sudoku_.VerifyAnswer())
-            {
-
-            }
-        }
         //Calling to the SudokuGenerator to load in the list of seeds, in preperation for generating new levels
+        //CreateSeedFile();
         SudokuGenerator.GeneratorStart();
         SpawnSudoku_Levels();
         //Loading difficulty selection from player prefs
@@ -184,7 +176,18 @@ public class LevelSelect : MonoBehaviour
         SaveLoad.ReMakeSave(suds);
     }
 
+    private void CreateSeedFile()
+    {
+        //Creates 4 seeds of each difficulty
+        //Should only be used to create the base data, and not to add new seeds
 
+        List<Sudoku> seeds_ = new List<Sudoku>();
+        foreach (Sudoku sudoku in sudokus_)
+        {
+            seeds_.Add(SudokuGenerator.GenerateSeed(sudoku));
+        }
+        SaveLoad.SaveSeeds(seeds_);
+    }
 
     private void SpawnSudoku_Levels()
     {
@@ -234,6 +237,7 @@ public class LevelSelect : MonoBehaviour
             current_sudokus_ = in_use_sudokus_.GetRange(entries_per_line * entries_per_line * current_page, entries_per_line * entries_per_line);
 
         }
+        //This should be where new sudokus are generated
         else if (current_page * entries_per_line * entries_per_line < in_use_sudokus_.Count)
         {
             //Partial page
@@ -267,6 +271,7 @@ public class LevelSelect : MonoBehaviour
     {
         if (next)
         {
+            //Remove this if statement once sudokus are generated dynamically
             if ((current_page + 1) * entries_per_line * entries_per_line < in_use_sudokus_.Count)
             {
                 current_page += 1;

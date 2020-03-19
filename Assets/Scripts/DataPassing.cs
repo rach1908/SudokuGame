@@ -18,8 +18,4 @@ public class DataPassing : MonoBehaviour
     {
         
     }
-
-
-
-
 }
